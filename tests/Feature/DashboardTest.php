@@ -10,9 +10,9 @@ test('guests are redirected to the login page', function () {
 });
 
 test('authenticated users can visit the dashboard', function () {
-    $role = Role::factory()->create(['id' => 3, 'nama_role' => 'media']);
+
     $user = User::factory()->create([
-        'role_id' => $role->id,
+        'role_id' => Role::factory(),
     ]);
     $this->actingAs($user)->get('/dashboard')->assertOk();
 });

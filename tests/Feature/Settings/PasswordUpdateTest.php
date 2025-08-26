@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Hash;
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 test('password can be updated', function () {
-    $role = Role::factory()->create(['id' => 3, 'nama_role' => 'media']);
+
     $user = User::factory()->create([
-        'role_id' => $role->id,
+        'role_id' => Role::factory(),
     ]);
 
     $response = $this
@@ -29,9 +29,9 @@ test('password can be updated', function () {
 });
 
 test('correct password must be provided to update password', function () {
-    $role = Role::factory()->create(['id' => 3, 'nama_role' => 'media']);
+
     $user = User::factory()->create([
-        'role_id' => $role->id,
+        'role_id' => Role::factory(),
     ]);
     $response = $this
         ->actingAs($user)

@@ -15,14 +15,14 @@ test('registration screen can be rendered', function () {
 
 test('new users can register', function () {
     $this->withoutExceptionHandling();
-    $role = Role::factory()->create(['id' => 3, 'nama_role' => 'media']);
+
 
     $response = $this->post('/register', [
         'name' => 'Emmet',
         'email' => 'emmet@example.com',
         'password' => 'password',
         'password_confirmation' => 'password',
-        'role_id' => $role->id
+        'role_id' => Role::factory(),
     ]);
 
     $response->assertSessionHasNoErrors();

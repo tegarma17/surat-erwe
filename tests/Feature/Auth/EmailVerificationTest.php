@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Event;
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 test('email verification screen can be rendered', function () {
-    $role = Role::create(['nama_role' => 'admin']);
+
 
     $user = User::factory()->unverified()->create([
-        'role_id' => $role->id
+        'role_id' => Role::factory(),
     ]);
 
     $response = $this->actingAs($user)->get('/verify-email');
@@ -21,10 +21,8 @@ test('email verification screen can be rendered', function () {
 });
 
 test('email can be verified', function () {
-    $role = Role::create(['nama_role' => 'admin']);
-
     $user = User::factory()->unverified()->create([
-        'role_id' => $role->id
+        'role_id' => Role::factory(),
     ]);
     Event::fake();
 
@@ -42,10 +40,8 @@ test('email can be verified', function () {
 });
 
 test('email is not verified with invalid hash', function () {
-    $role = Role::create(['nama_role' => 'admin']);
-
     $user = User::factory()->unverified()->create([
-        'role_id' => $role->id
+        'role_id' => Role::factory(),
     ]);
     $verificationUrl = URL::temporarySignedRoute(
         'verification.verify',

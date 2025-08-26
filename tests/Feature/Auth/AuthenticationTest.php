@@ -12,9 +12,10 @@ test('login screen can be rendered', function () {
 });
 
 test('users can authenticate using the login screen', function () {
-    Role::factory()->create(['id' => 3, 'nama_role' => 'warga']);
+
     $user = User::factory()->create([
         'password' => bcrypt('password'),
+        'role_id' => Role::factory(),
     ]);
 
 
@@ -28,9 +29,9 @@ test('users can authenticate using the login screen', function () {
 });
 
 test('users can not authenticate with invalid password', function () {
-    $role = Role::create(['nama_role' => 'admin']);
+
     $user = User::factory()->create([
-        'role_id' => $role->id
+        'role_id' => Role::factory(),
     ]);
 
     $this->post('/login', [
@@ -42,9 +43,9 @@ test('users can not authenticate with invalid password', function () {
 });
 
 test('users can logout', function () {
-    $role = Role::create(['nama_role' => 'admin']);
+
     $user = User::factory()->create([
-        'role_id' => $role->id
+        'role_id' => Role::factory(),
     ]);
     $response = $this->actingAs($user)->post('/logout');
 

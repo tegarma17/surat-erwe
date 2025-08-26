@@ -6,9 +6,9 @@ use App\Models\User;
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 test('confirm password screen can be rendered', function () {
-    $role = Role::create(['nama_role' => 'admin']);
+
     $user = User::factory()->create([
-        'role_id' => $role->id
+        'role_id' => Role::factory(),
     ]);
     $response = $this->actingAs($user)->get('/confirm-password');
 
@@ -16,9 +16,9 @@ test('confirm password screen can be rendered', function () {
 });
 
 test('password can be confirmed', function () {
-    $role = Role::create(['nama_role' => 'admin']);
+
     $user = User::factory()->create([
-        'role_id' => $role->id
+        'role_id' => Role::factory(),
     ]);
 
     $response = $this->actingAs($user)->post('/confirm-password', [
@@ -30,9 +30,9 @@ test('password can be confirmed', function () {
 });
 
 test('password is not confirmed with invalid password', function () {
-    $role = Role::create(['nama_role' => 'admin']);
+
     $user = User::factory()->create([
-        'role_id' => $role->id
+        'role_id' => Role::factory(),
     ]);
 
     $response = $this->actingAs($user)->post('/confirm-password', [

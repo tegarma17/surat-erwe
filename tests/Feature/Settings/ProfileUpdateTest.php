@@ -63,9 +63,9 @@ test('email verification status is unchanged when the email address is unchanged
 });
 
 test('user can delete their account', function () {
-    $role = Role::factory()->create(['id' => 3, 'nama_role' => 'media']);
+
     $user = User::factory()->create([
-        'role_id' => $role->id,
+        'role_id' => Role::factory(),
     ]);
 
     $response = $this
@@ -83,9 +83,9 @@ test('user can delete their account', function () {
 });
 
 test('correct password must be provided to delete account', function () {
-    $role = Role::factory()->create(['id' => 3, 'nama_role' => 'media']);
+
     $user = User::factory()->create([
-        'role_id' => $role->id,
+        'role_id' => Role::factory(),
     ]);
 
     $response = $this
