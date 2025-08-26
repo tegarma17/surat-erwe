@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Role;
 use App\Models\User;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
@@ -11,7 +12,11 @@ test('login screen can be rendered', function () {
 });
 
 test('users can authenticate using the login screen', function () {
-    $user = User::factory()->create();
+    Role::factory()->create(['id' => 3, 'nama_role' => 'warga']);
+    $user = User::factory()->create([
+        'password' => bcrypt('password'),
+    ]);
+
 
     $response = $this->post('/login', [
         'email' => $user->email,
@@ -23,7 +28,10 @@ test('users can authenticate using the login screen', function () {
 });
 
 test('users can not authenticate with invalid password', function () {
-    $user = User::factory()->create();
+    $role = Role::create(['nama_role' => 'admin']);
+    $user = User::factory()->create([
+        'role_id' => $role->id
+    ]);
 
     $this->post('/login', [
         'email' => $user->email,
@@ -34,8 +42,10 @@ test('users can not authenticate with invalid password', function () {
 });
 
 test('users can logout', function () {
-    $user = User::factory()->create();
-
+    $role = Role::create(['nama_role' => 'admin']);
+    $user = User::factory()->create([
+        'role_id' => $role->id
+    ]);
     $response = $this->actingAs($user)->post('/logout');
 
     $this->assertGuest();

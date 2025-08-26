@@ -1,14 +1,19 @@
 <?php
 
+use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\URL;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 test('email verification screen can be rendered', function () {
-    $user = User::factory()->unverified()->create();
+    $role = Role::create(['nama_role' => 'admin']);
+
+    $user = User::factory()->unverified()->create([
+        'role_id' => $role->id
+    ]);
 
     $response = $this->actingAs($user)->get('/verify-email');
 
@@ -16,8 +21,11 @@ test('email verification screen can be rendered', function () {
 });
 
 test('email can be verified', function () {
-    $user = User::factory()->unverified()->create();
+    $role = Role::create(['nama_role' => 'admin']);
 
+    $user = User::factory()->unverified()->create([
+        'role_id' => $role->id
+    ]);
     Event::fake();
 
     $verificationUrl = URL::temporarySignedRoute(
@@ -30,12 +38,15 @@ test('email can be verified', function () {
 
     Event::assertDispatched(Verified::class);
     expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
-    $response->assertRedirect(route('dashboard', absolute: false).'?verified=1');
+    $response->assertRedirect(route('dashboard', absolute: false) . '?verified=1');
 });
 
 test('email is not verified with invalid hash', function () {
-    $user = User::factory()->unverified()->create();
+    $role = Role::create(['nama_role' => 'admin']);
 
+    $user = User::factory()->unverified()->create([
+        'role_id' => $role->id
+    ]);
     $verificationUrl = URL::temporarySignedRoute(
         'verification.verify',
         now()->addMinutes(60),

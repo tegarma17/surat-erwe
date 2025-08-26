@@ -1,5 +1,10 @@
 <?php
 
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 test('registration screen can be rendered', function () {
@@ -9,13 +14,19 @@ test('registration screen can be rendered', function () {
 });
 
 test('new users can register', function () {
+    $this->withoutExceptionHandling();
+    $role = Role::factory()->create(['id' => 3, 'nama_role' => 'media']);
+
     $response = $this->post('/register', [
-        'name' => 'Test User',
-        'email' => 'test@example.com',
+        'name' => 'Emmet',
+        'email' => 'emmet@example.com',
         'password' => 'password',
         'password_confirmation' => 'password',
+        'role_id' => $role->id
     ]);
 
+    $response->assertSessionHasNoErrors();
     $this->assertAuthenticated();
+    $this->assertAuthenticatedAs(User::first());
     $response->assertRedirect(route('dashboard', absolute: false));
 });
