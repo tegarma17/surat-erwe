@@ -1,7 +1,6 @@
 import AuthLayout from '@/layouts/auth-layout';
-import { Link, useForm } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { FormEventHandler } from 'react';
 import login from '../../../../public/login.png';
 
 type RegisterForm = {
@@ -12,23 +11,23 @@ type RegisterForm = {
 };
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
-    });
+    // const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
+    //     name: '',
+    //     email: '',
+    //     password: '',
+    //     password_confirmation: '',
+    // });
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
-        post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
-        });
-    };
+    // const submit: FormEventHandler = (e) => {
+    //     e.preventDefault();
+    //     post(route('register'), {
+    //         onFinish: () => reset('password', 'password_confirmation'),
+    //     });
+    // };
 
     return (
         <AuthLayout title="" description="">
-            <form method="POST" className="flex flex-col gap-6" onSubmit={submit}>
+            <form method="POST" className="flex flex-col gap-6">
                 <div className="flex flex-col items-center justify-center gap-5 lg:flex-row">
                     <img src={login} alt="" className="max-w-full lg:w-2/5" />
                     <div className="mx-3 flex w-full flex-col items-center justify-center gap-3 lg:w-1/2 lg:items-start lg:justify-around">

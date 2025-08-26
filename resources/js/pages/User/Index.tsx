@@ -1,7 +1,7 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { CheckCircle2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 const breadcrumbs: BreadcrumbItem[] = [
@@ -41,9 +41,6 @@ export default function UserIndex() {
         3: 'Warga',
         // Tambahkan sesuai kebutuhan
     };
-
-    const { processing, delete: destroy } = useForm();
-
     useEffect(() => {
         if (flash.message) {
             setShow(true);

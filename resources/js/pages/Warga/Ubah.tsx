@@ -63,12 +63,10 @@ interface Warga {
     // Add other fields as needed
 }
 
-interface rtList {}
 interface Props {
     warga: Warga;
     kelurahans: Kelurahan[];
     email: string;
-    rtList: rtList;
     initialKelurahanId: number;
     initialRwId: number;
     initialRtId: number;
@@ -98,6 +96,7 @@ export default function WargaUbah({ warga, email, kelurahans, initialKelurahanId
     const [kelurahanId, setKelurahanId] = useState(initialKelurahanId.toString());
     const [rwId, setRwId] = useState(initialRwId.toString());
     const [rtId, setRtId] = useState(initialRtId.toString());
+    console.log(initialRtId);
     const selectedKelurahan = kelurahans.find((k) => k.id === parseInt(kelurahanId));
     const selectedRw = selectedKelurahan?.rws.find((rw) => rw.id === parseInt(rwId));
 

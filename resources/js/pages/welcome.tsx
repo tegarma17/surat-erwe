@@ -1,4 +1,3 @@
-import { type SharedData } from '@/types';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Head, Link, usePage } from '@inertiajs/react';
@@ -56,7 +55,7 @@ export default function Welcome() {
     function classNames(...classes: string[]) {
         return classes.filter(Boolean).join(' ');
     }
-    const { auth } = usePage<SharedData>().props;
+    // const { auth } = usePage<SharedData>().props;
 
     return (
         <>
@@ -66,9 +65,9 @@ export default function Welcome() {
             </Head>
             <Disclosure
                 as="nav"
-                className="bg-tiga relative after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10"
+                className="relative bg-tiga after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10"
             >
-                <div className="bg-empat mx-auto w-full px-2 sm:px-6 lg:px-8">
+                <div className="mx-auto w-full bg-empat px-2 sm:px-6 lg:px-8">
                     <div className="relative flex h-16 items-center justify-between">
                         <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                             {/* Mobile menu button*/}
@@ -91,8 +90,8 @@ export default function Welcome() {
                                             href={item.href}
                                             aria-current={item.current ? 'page' : undefined}
                                             className={classNames(
-                                                item.current ? 'bg-empat text-white' : 'hover:bg-empat text-black hover:text-white',
-                                                'font-dua text-satu rounded-md px-3 py-2 text-sm font-bold',
+                                                item.current ? 'bg-empat text-white' : 'text-black hover:bg-empat hover:text-white',
+                                                'rounded-md px-3 py-2 font-dua text-sm font-bold text-satu',
                                             )}
                                         >
                                             {item.name}
@@ -132,7 +131,7 @@ export default function Welcome() {
                         'url(https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)',
                 }}
             >
-                <div className="bg-dua/40 absolute inset-0 z-0" />
+                <div className="absolute inset-0 z-0 bg-dua/40" />
 
                 {/* Konten */}
                 <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
@@ -140,7 +139,7 @@ export default function Welcome() {
                         initial={{ opacity: 0, y: -100 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1.1 }}
-                        className="font-satu mb-4 text-4xl font-extrabold sm:text-5xl"
+                        className="mb-4 font-satu text-4xl font-extrabold sm:text-5xl"
                     >
                         Selamat Datang di{' '}
                         <motion.p
@@ -156,7 +155,7 @@ export default function Welcome() {
                         initial={{ opacity: 0, y: -100 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1.1 }}
-                        className="font-tiga mb-6 max-w-xl text-base lg:text-xl"
+                        className="mb-6 max-w-xl font-tiga text-base lg:text-xl"
                     >
                         Melayani pembuatan e-Surat diharapkan dapat mempermudah dalam pembuatan surat menyurat di lingkungan RW
                     </motion.p>
@@ -164,7 +163,7 @@ export default function Welcome() {
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         transition={{ duration: 1.1 }}
-                        className="bg-button-primary rounded-md px-6 py-3 transition hover:bg-blue-700"
+                        className="rounded-md bg-button-primary px-6 py-3 transition hover:bg-blue-700"
                     >
                         Buat Surat
                     </motion.button>
@@ -174,14 +173,14 @@ export default function Welcome() {
             <section className="bg-white p-5"></section>
             {/* Visi MIsi */}
             <section className="bg-white">
-                <div className="font-satu flex h-[33rem] flex-col items-center justify-center gap-3 px-4 text-center text-lg shadow-lg lg:flex-row">
+                <div className="flex h-[33rem] flex-col items-center justify-center gap-3 px-4 text-center font-satu text-lg shadow-lg lg:flex-row">
                     <motion.div
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         transition={{ duration: 1.1 }}
-                        className="bg-lima flex h-3/4 flex-col items-center justify-center rounded-md shadow-lg"
+                        className="flex h-3/4 flex-col items-center justify-center rounded-md bg-lima shadow-lg"
                     >
-                        <PiLampPendantLight className="text-empat my-5 text-center text-4xl" />
+                        <PiLampPendantLight className="my-5 text-center text-4xl text-empat" />
                         <h1 className="font-satu text-2xl font-bold">Visi</h1>
                         <p className="p-3 text-sm">
                             Penggunaan sistem digital dalam pembuatan surat RW dapat mempercepat proses, mengurangi kesalahan, dan membuat arsip lebih
@@ -192,9 +191,9 @@ export default function Welcome() {
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         transition={{ duration: 1.1 }}
-                        className="bg-lima my-5 flex h-3/4 flex-col items-center justify-center rounded-md shadow-lg"
+                        className="my-5 flex h-3/4 flex-col items-center justify-center rounded-md bg-lima shadow-lg"
                     >
-                        <MdMenuBook className="text-empat my-5 text-center text-4xl" />
+                        <MdMenuBook className="my-5 text-center text-4xl text-empat" />
                         <h1 className="font-satu text-2xl font-bold">Misi</h1>
                         <div className="p-3">
                             <p className="my-2 text-sm">
@@ -213,9 +212,9 @@ export default function Welcome() {
             {/* Keunggulan */}
             <section className="">
                 <div>
-                    <h1 className="bg-tiga font-satu p-5 text-center text-2xl font-extrabold shadow-md">Service Us</h1>
+                    <h1 className="bg-tiga p-5 text-center font-satu text-2xl font-extrabold shadow-md">Service Us</h1>
                 </div>
-                <div className="bg-tiga flex flex-col items-center justify-evenly gap-3 p-4 md:flex-row lg:flex-row">
+                <div className="flex flex-col items-center justify-evenly gap-3 bg-tiga p-4 md:flex-row lg:flex-row">
                     {/* <!-- Card 1 --> */}
                     <div className="h-[18rem] w-64 overflow-hidden rounded-lg bg-white shadow-md">
                         <img className="mx-auto mt-3 h-fit w-1/2" src={easy} alt="Image 1" />
@@ -246,7 +245,7 @@ export default function Welcome() {
             {/* layanan */}
             <section className="bg-white">
                 <div>
-                    <h1 className="font-satu text-empat p-5 text-center text-2xl font-extrabold">Melayani </h1>
+                    <h1 className="p-5 text-center font-satu text-2xl font-extrabold text-empat">Melayani </h1>
                 </div>
                 <div className="flex flex-col items-center justify-evenly gap-6 p-4 md:flex-row lg:flex-row">
                     {/* <!-- Card 1 --> */}
@@ -290,8 +289,8 @@ export default function Welcome() {
 
             {/* Tata Cara */}
             <section>
-                <div className="bg-empat mt-5">
-                    <h2 className="font-dua -mt-5 py-5 text-center text-2xl font-bold text-white">Tata Cara Pendaftaran</h2>
+                <div className="mt-5 bg-empat">
+                    <h2 className="-mt-5 py-5 text-center font-dua text-2xl font-bold text-white">Tata Cara Pendaftaran</h2>
                     <div className="mx-auto flex w-full flex-col items-center justify-evenly p-4 md:flex-row lg:flex-row">
                         <figure>
                             <motion.img
@@ -303,10 +302,10 @@ export default function Welcome() {
                                 className="drop-shadow-2xl"
                             />
                         </figure>
-                        <div className="border-satu space-y-8 border-l-8 pl-12">
+                        <div className="space-y-8 border-l-8 border-satu pl-12">
                             {/* <!-- Langkah 1 --> */}
                             <div className="relative">
-                                <div className="bg-satu absolute top-1 -left-10 flex h-6 w-6 items-center justify-center rounded-full font-bold text-white">
+                                <div className="absolute top-1 -left-10 flex h-6 w-6 items-center justify-center rounded-full bg-satu font-bold text-white">
                                     1
                                 </div>
                                 <h3 className="font-dua text-2xl font-bold text-white">Isi Formulir</h3>
@@ -314,7 +313,7 @@ export default function Welcome() {
                             </div>
                             {/* <!-- Langkah 2 --> */}
                             <div className="relative">
-                                <div className="bg-satu absolute top-1 -left-10 flex h-6 w-6 items-center justify-center rounded-full font-bold text-white">
+                                <div className="absolute top-1 -left-10 flex h-6 w-6 items-center justify-center rounded-full bg-satu font-bold text-white">
                                     2
                                 </div>
                                 <h3 className="font-dua text-2xl font-bold text-white">Unggah Dokumen</h3>
@@ -323,7 +322,7 @@ export default function Welcome() {
 
                             {/* <!-- Langkah 3 --> */}
                             <div className="relative">
-                                <div className="bg-satu absolute top-1 -left-10 flex h-6 w-6 items-center justify-center rounded-full font-bold text-white">
+                                <div className="absolute top-1 -left-10 flex h-6 w-6 items-center justify-center rounded-full bg-satu font-bold text-white">
                                     3
                                 </div>
                                 <h3 className="font-dua text-2xl font-bold text-white">Verifikasi</h3>
@@ -332,7 +331,7 @@ export default function Welcome() {
 
                             {/* <!-- Langkah 4 --> */}
                             <div className="relative">
-                                <div className="bg-satu absolute top-1 -left-10 flex h-6 w-6 items-center justify-center rounded-full font-bold text-white">
+                                <div className="absolute top-1 -left-10 flex h-6 w-6 items-center justify-center rounded-full bg-satu font-bold text-white">
                                     4
                                 </div>
                                 <h3 className="font-dua text-2xl font-bold text-white">Selesai</h3>
@@ -349,11 +348,11 @@ export default function Welcome() {
             <section>
                 {' '}
                 <div className="bg-tiga shadow-lg lg:h-[35rem]">
-                    <h1 className="font-dua p-5 text-center text-3xl font-bold text-white">Susunan Kepengurusan</h1>
+                    <h1 className="p-5 text-center font-dua text-3xl font-bold text-white">Susunan Kepengurusan</h1>
                     <div className="flex flex-row items-center justify-center gap-5">
                         <button
                             onClick={prevItems}
-                            className="bg-button-primary hidden rounded-md px-4 py-2 transition hover:bg-blue-700 disabled:opacity-50 lg:block"
+                            className="hidden rounded-md bg-button-primary px-4 py-2 transition hover:bg-blue-700 disabled:opacity-50 lg:block"
                             disabled={index === 0}
                         >
                             Sebelumnya
@@ -379,7 +378,7 @@ export default function Welcome() {
 
                         <button
                             onClick={nextItems}
-                            className="bg-button-primary hidden rounded-md px-4 py-2 transition hover:bg-blue-700 disabled:opacity-50 lg:block"
+                            className="hidden rounded-md bg-button-primary px-4 py-2 transition hover:bg-blue-700 disabled:opacity-50 lg:block"
                             disabled={index + itemsPerPage >= items.length}
                         >
                             Selanjutnya
@@ -388,14 +387,14 @@ export default function Welcome() {
                     <div className="mx-1 flex flex-row justify-between p-3">
                         <button
                             onClick={prevItems}
-                            className="bg-button-primary rounded-md px-4 py-2 transition hover:bg-blue-700 disabled:opacity-50 lg:hidden"
+                            className="rounded-md bg-button-primary px-4 py-2 transition hover:bg-blue-700 disabled:opacity-50 lg:hidden"
                             disabled={index === 0}
                         >
                             Sebelumnya
                         </button>
                         <button
                             onClick={nextItems}
-                            className="bg-button-primary rounded-md px-4 py-2 transition hover:bg-blue-700 disabled:opacity-50 lg:hidden"
+                            className="rounded-md bg-button-primary px-4 py-2 transition hover:bg-blue-700 disabled:opacity-50 lg:hidden"
                             disabled={index + itemsPerPage >= items.length}
                         >
                             Selanjutnya
@@ -408,11 +407,11 @@ export default function Welcome() {
 
             <section>
                 <div className="mx-auto bg-white text-black lg:h-[35rem]">
-                    <h1 className="font-dua text-center text-3xl font-bold">Berita Terkini</h1>
+                    <h1 className="text-center font-dua text-3xl font-bold">Berita Terkini</h1>
                     <div className="flex flex-row items-center justify-center gap-5 px-4">
                         <button
                             onClick={prevItems}
-                            className="bg-button-primary hidden rounded-md px-6 py-3 transition hover:bg-blue-700 disabled:opacity-50 lg:block"
+                            className="hidden rounded-md bg-button-primary px-6 py-3 transition hover:bg-blue-700 disabled:opacity-50 lg:block"
                             disabled={index === 0}
                         >
                             Sebelumnya
@@ -436,7 +435,7 @@ export default function Welcome() {
 
                                             <Link
                                                 href={`/berita/${item.slug}`}
-                                                className="bg-button-primary rounded-md px-6 py-3 transition hover:bg-blue-700"
+                                                className="rounded-md bg-button-primary px-6 py-3 transition hover:bg-blue-700"
                                             >
                                                 Selengkapnya
                                             </Link>
@@ -446,7 +445,7 @@ export default function Welcome() {
                         </div>
                         <button
                             onClick={nextItems}
-                            className="bg-button-primary hidden rounded-md px-6 py-3 transition hover:bg-blue-700 disabled:opacity-50 lg:block"
+                            className="hidden rounded-md bg-button-primary px-6 py-3 transition hover:bg-blue-700 disabled:opacity-50 lg:block"
                             disabled={index + itemsPerPage >= listBerita.length}
                         >
                             Selanjutnya
@@ -498,7 +497,7 @@ export default function Welcome() {
                             </div>
                         </div>
                         <div className="w-1/2">
-                            <h1 className="font-satu mb-5 text-3xl font-bold">Kontak Kami</h1>
+                            <h1 className="mb-5 font-satu text-3xl font-bold">Kontak Kami</h1>
                             <div className="flex flex-col gap-4">
                                 <input type="text" placeholder="Email" className="input w-full rounded-sm bg-white p-2 text-black" />
                                 <input type="text" placeholder="Masalah " className="input w-full rounded-sm bg-white p-2 text-black" />
@@ -506,7 +505,7 @@ export default function Welcome() {
                                     className="textarea textarea-bordered w-full rounded-sm bg-white p-2 text-black"
                                     placeholder="Tulis komentar..."
                                 ></textarea>
-                                <button className="bg-button-primary rounded-md px-6 py-3 transition hover:bg-blue-700 disabled:opacity-50">
+                                <button className="rounded-md bg-button-primary px-6 py-3 transition hover:bg-blue-700 disabled:opacity-50">
                                     Kirim
                                 </button>
                             </div>

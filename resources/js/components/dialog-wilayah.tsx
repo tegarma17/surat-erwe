@@ -19,7 +19,7 @@ export function DialogWilayah({ nameButton }: { nameButton: string }) {
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
 
-    const { data, setData, post, processing, errors } = useForm({ nama: '' });
+    const { data, setData, post, processing } = useForm({ nama: '' });
     const handleSimpan = () => {
         post(route('wilayah.simpan_kelurahan'), {
             preserveScroll: true,
@@ -52,7 +52,7 @@ export function DialogWilayah({ nameButton }: { nameButton: string }) {
                         <DialogClose asChild>
                             <Button variant="outline">Cancel</Button>
                         </DialogClose>
-                        <Button type="submit" onClick={handleSimpan}>
+                        <Button type="submit" disabled={processing} onClick={handleSimpan}>
                             Simpan
                         </Button>
                     </DialogFooter>

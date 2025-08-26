@@ -36,7 +36,7 @@ export default function WilayahIndex() {
     const { kelurahan, flash } = usePage().props as unknown as PageProps;
     const [show, setShow] = useState(!!flash.message);
 
-    const { processing, delete: destroy } = useForm();
+    const { delete: destroy } = useForm();
 
     const handleHapus = (id: number) => {
         destroy(route('wilayah.delete_kelurahan', { id }));

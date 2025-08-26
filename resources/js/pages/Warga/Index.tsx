@@ -37,7 +37,7 @@ export default function WargaIndex() {
     const [show, setShow] = useState(!!flash.message);
     const [fadeOut, setFadeOut] = useState(false);
 
-    const { processing, delete: destroy } = useForm();
+    const { delete: destroy } = useForm();
 
     const handleHapus = (id: number) => {
         destroy(route('warga.hapus', { id }));

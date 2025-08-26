@@ -36,7 +36,7 @@ export default function BeritaIndex() {
     const { berita, flash } = usePage().props as unknown as PageProps;
     const [show, setShow] = useState(!!flash.message);
 
-    const { processing, delete: destroy } = useForm();
+    const { delete: destroy } = useForm();
 
     const handleHapus = (id: number) => {
         destroy(route('berita.hapus', { id }));

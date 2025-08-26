@@ -52,11 +52,8 @@ export default function SuratIndex() {
         proses: 'Proses',
         selesai: 'Selesai',
     };
-    const { processing, delete: destroy } = useForm();
+    const { delete: destroy } = useForm();
 
-    const handleHapus = (id: number) => {
-        destroy(route('surat.hapus', { id }));
-    };
     useEffect(() => {
         if (flash.message) {
             setShow(true);

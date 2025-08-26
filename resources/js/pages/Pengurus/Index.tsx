@@ -51,7 +51,6 @@ interface Props {
 
 export default function PengurusIndex({ pengurus, flash }: Props) {
     const [show, setShow] = useState(!!flash.message);
-    const [selectedId, setSelectedId] = useState<number | null>(null);
     const jabatanLabel: Record<string, string> = {
         ket: 'Ketua',
         W_ket: 'Wakil Ketua',
@@ -68,21 +67,7 @@ export default function PengurusIndex({ pengurus, flash }: Props) {
         sek_pendikbud: 'Seksi Pendidikan',
         ssek_kes: 'Seksi keseahatan',
     };
-    const { processing, delete: destroy, put: update } = useForm();
-    const selecetedPengurus = pengurus.find((p) => p.id === selectedId);
-    const { data, setData, post, errors, reset } = useForm({
-        is_aktif: selecetedPengurus?.is_aktif ?? '', // status jabatan pengurus
-        // ...field lain
-    });
-    useEffect(() => {
-        if (selecetedPengurus) {
-            setData({
-                is_aktif: selecetedPengurus.is_aktif,
-            });
-        }
-    }, [selecetedPengurus]);
-
-    console.log(data.is_aktif);
+    const { delete: destroy, put: update } = useForm();
     const handleHapus = (id: number) => {
         destroy(route('pengurus.hapus', { id }));
     };

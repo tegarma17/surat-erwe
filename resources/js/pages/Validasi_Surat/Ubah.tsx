@@ -52,7 +52,7 @@ export default function SuratUbah() {
         supen: 'Surat Pengantar',
     };
     const { surat } = usePage().props as unknown as Props;
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, put } = useForm({
         status: surat.validasi_surat?.status,
     });
     const handleSimpan = (e: React.FormEvent) => {

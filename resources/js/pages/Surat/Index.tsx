@@ -49,7 +49,7 @@ export default function SuratIndex() {
         proses: 'Proses',
         selesai: 'Selesai',
     };
-    const { processing, delete: destroy } = useForm();
+    const { delete: destroy } = useForm();
 
     const handleHapus = (id: number) => {
         destroy(route('surat.hapus', { id }));
@@ -62,7 +62,7 @@ export default function SuratIndex() {
             }, 2000);
             return () => clearTimeout(timer);
         }
-    }, [flash.message]);
+    }, [flash.message, setShow]);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Berita" />

@@ -1,16 +1,12 @@
 import { Link } from '@inertiajs/react';
 
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { useSidebar } from '@/components/ui/sidebar';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { type SharedData } from '@/types';
-import { usePage } from '@inertiajs/react';
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
 import logo from '../../../public/logo.png';
 export default function ProfileDropdown() {
-    const { auth } = usePage<SharedData>().props;
-    const { state } = useSidebar();
-    const isMobile = useIsMobile();
+    // const { auth } = usePage<SharedData>().props;
+    // const { state } = useSidebar();
+    // const isMobile = useIsMobile();
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>

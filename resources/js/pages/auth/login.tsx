@@ -1,7 +1,7 @@
 import AuthLayout from '@/layouts/auth-layout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { FormEventHandler, useState } from 'react';
+import { FormEventHandler } from 'react';
 import login from '../../../../public/login.png';
 
 type LoginForm = {
@@ -16,13 +16,13 @@ interface LoginProps {
 }
 
 export default function Login({ status, canResetPassword }: LoginProps) {
-    const { data, setData, post, processing, errors, reset } = useForm<Required<LoginForm>>({
+    const { data, setData, post, reset } = useForm<Required<LoginForm>>({
         email: '',
         password: '',
         remember: false,
     });
-    const [showPassword, setShowPassword] = useState(false);
-    const [isChecked, setIsChecked] = useState(false);
+    // const [showPassword, setShowPassword] = useState(false);
+    // const [isChecked, setIsChecked] = useState(false);
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post(route('login'), {
