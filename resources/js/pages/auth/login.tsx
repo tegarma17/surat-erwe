@@ -15,7 +15,7 @@ interface LoginProps {
     canResetPassword: boolean;
 }
 
-export default function Login({ status, canResetPassword }: LoginProps) {
+export default function Login({ status }: LoginProps) {
     const { data, setData, post, reset } = useForm<Required<LoginForm>>({
         email: '',
         password: '',

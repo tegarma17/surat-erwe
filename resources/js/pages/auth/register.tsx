@@ -3,28 +3,7 @@ import { Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import login from '../../../../public/login.png';
 
-type RegisterForm = {
-    name: string;
-    email: string;
-    password: string;
-    password_confirmation: string;
-};
-
 export default function Register() {
-    // const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
-    //     name: '',
-    //     email: '',
-    //     password: '',
-    //     password_confirmation: '',
-    // });
-
-    // const submit: FormEventHandler = (e) => {
-    //     e.preventDefault();
-    //     post(route('register'), {
-    //         onFinish: () => reset('password', 'password_confirmation'),
-    //     });
-    // };
-
     return (
         <AuthLayout title="" description="">
             <form method="POST" className="flex flex-col gap-6">

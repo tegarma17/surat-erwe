@@ -3,7 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { BadgeCheck, Ban, CheckCircle2Icon, Timer } from 'lucide-react';
 import { useEffect, useState } from 'react';
 const breadcrumbs: BreadcrumbItem[] = [
@@ -52,7 +52,6 @@ export default function SuratIndex() {
         proses: 'Proses',
         selesai: 'Selesai',
     };
-    const { delete: destroy } = useForm();
 
     useEffect(() => {
         if (flash.message) {

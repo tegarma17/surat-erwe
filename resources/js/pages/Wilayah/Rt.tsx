@@ -49,7 +49,7 @@ export default function WilayahRtIndex() {
     const [show, setShow] = useState(!!flash.message);
     const namaKelurahanList = rw.nomer;
 
-    const { processing, delete: destroy } = useForm();
+    const { delete: destroy } = useForm();
 
     const handleHapus = (id: number) => {
         destroy(route('hapus.data_rt', { id }));
