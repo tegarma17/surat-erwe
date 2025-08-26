@@ -83,7 +83,15 @@ class JabatanController extends Controller
         ]);
         return response()->json($jabatan, 200);
     }
-
+    public function updateStatus(string $id)
+    {
+        $jabatan = Jabatan::findorFail($id);
+        if ($jabatan['is_aktif'] === 'aktif') {
+            $jabatan->update(['is_aktif' => 'nonaktif']);
+        } else {
+            $jabatan->update(['is_aktif' => 'aktif']);
+        }
+    }
     /**
      * Remove the specified resource from storage.
      */

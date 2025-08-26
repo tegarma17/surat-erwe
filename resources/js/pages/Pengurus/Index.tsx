@@ -68,7 +68,7 @@ export default function PengurusIndex({ pengurus, flash }: Props) {
         sek_pendikbud: 'Seksi Pendidikan',
         ssek_kes: 'Seksi keseahatan',
     };
-    const { processing, delete: destroy } = useForm();
+    const { processing, delete: destroy, put: update } = useForm();
     const selecetedPengurus = pengurus.find((p) => p.id === selectedId);
     const { data, setData, post, errors, reset } = useForm({
         is_aktif: selecetedPengurus?.is_aktif ?? '', // status jabatan pengurus
@@ -87,9 +87,10 @@ export default function PengurusIndex({ pengurus, flash }: Props) {
         destroy(route('berita.hapus', { id }));
     };
 
-    const handleUpdateStatus = (id: number, status: string) => {
-           
-    }
+    const handleUpdateStatus = (id: number) => {
+        update(route('statusUpdate.update', { id }));
+    };
+
     useEffect(() => {
         if (flash.message) {
             setShow(true);
@@ -101,10 +102,10 @@ export default function PengurusIndex({ pengurus, flash }: Props) {
     }, [flash.message]);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Berita" />
+            <Head title="Data Pengurus" />
             <div className="mx-5 my-3 flex">
                 <Link href={route('pengurus.create')}>
-                    <Button className="bg-empat text-white hover:bg-lima">Tambah Berita</Button>
+                    <Button className="bg-empat text-white hover:bg-lima">Tambah Pengurus</Button>
                 </Link>
             </div>
 
@@ -120,7 +121,7 @@ export default function PengurusIndex({ pengurus, flash }: Props) {
 
             <div className="rounded-lg bg-white p-6 shadow">
                 <div className="mb-4 flex items-center justify-between">
-                    <h2 className="text-xl font-semibold text-gray-800">Data Berita Warga</h2>
+                    <h2 className="text-xl font-semibold text-gray-800">Data Pengurus </h2>
                     <input type="text" placeholder="Search..." className="rounded-md border px-3 py-2 text-sm text-black" />
                 </div>
                 <table className="min-w-full divide-y divide-gray-200 text-sm">
@@ -161,7 +162,14 @@ export default function PengurusIndex({ pengurus, flash }: Props) {
                                         </Badge>
                                     </td>
                                     <td className="flex gap-2 px-4 py-2">
-                                        <ConfirmUpdateDialog onConfirm={() => handleHapus(pengurus.id)} nameButton="Nonaktifkan Jabatan" />
+                                        <ConfirmUpdateDialog
+                                            alertTitle={pengurus.is_aktif === 'aktif' ? ' menonaktifkan ' : ' menakftifkan '}
+                                            alertDescription={pengurus.is_aktif === 'aktif' ? ' dinonaktifkan ' : ' dinakftifkan '}
+                                            itemName={pengurus.warga?.nama}
+                                            className={pengurus.is_aktif === 'aktif' ? 'bg-red-400' : 'bg-green-600'}
+                                            onConfirm={() => handleUpdateStatus(pengurus.id)}
+                                            nameButton={pengurus.is_aktif === 'aktif' ? 'Nonaktifkan Kepengurusan' : 'Aktifkan Kepengurusan'}
+                                        />
 
                                         <ConfirmDeleteDialog onConfirm={() => handleHapus(pengurus.id)} nameButton="Hapus" />
                                     </td>

@@ -39,6 +39,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     route::get('/set-wilayah', [WilayahController::class, 'index'])->name('wilayah.index');
+    route::post('/set-wilayah-kelurahan', [WilayahController::class, 'storeKelurahan'])->name('wilayah.simpan_kelurahan');
+    route::delete('/delete-wilayah-kelurahan/{id}', [WilayahController::class, 'deleteKelurahan'])->name('wilayah.delete_kelurahan');
+    route::get('/set-wilayah-kelurahan/rw/{id}', [WilayahController::class, 'showDataKelurahan'])->name('wilayah.data_rw');
+    route::get('/set-wilayah-kelurahan/rw/rt/{id}', [WilayahController::class, 'showDataRw'])->name('wilayah.data_rt');
+    route::post('/set-wilayah-kelurahan/rw/simpan', [WilayahController::class, 'simpanRw'])->name('simpanWilayah.data_rw');
+    route::post('/set-wilayah-kelurahan/rw/rt/simpan', [WilayahController::class, 'simpanRt'])->name('simpanWilayah.data_rt');
+    route::delete('/set-wilayah-kelurahan/rw/delete/{id}', [WilayahController::class, 'deleteRW'])->name('hapus.data_rw');
+
+
     Route::controller(SuratController::class)->group(function () {
         Route::get('/data-surat', 'index')->name('surat.index');
         Route::get('/data-surat-baru', 'create')->name('surat.create');
@@ -60,6 +69,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/tambah-pengurus-baru', 'create')->name('pengurus.create');
         Route::post('/simpan-pengurus-baru', 'store')->name('pengurus.tambah');
         Route::get('/data-pengurus/{id}/edit', 'edit')->name('pengurus.ubah');
+        Route::put('/update-status-pengurus/{id}/edit', 'updateStatus')->name('statusUpdate.update');
     });
 
 

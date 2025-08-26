@@ -1,103 +1,78 @@
 import { Button } from '@/components/ui/button';
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useForm } from '@inertiajs/react';
 import { useState } from 'react';
 import { Input } from './ui/input';
 
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-interface Wilayah {
-    nama: string;
+interface RTRow {
+    nomer: string | '';
 }
-export function DialogWilayahRt() {
-    const [rows, setRows] = useState<Wilayah[]>([{ nama: '' }]);
-
-    const tambahBaris = () => {
-        setRows([...rows, { nama: '' }]);
-    };
+interface props {
+    rwId: number;
+}
+export function DialogWilayahRt({ rwId }: props) {
+    const [isOpen, setIsOpen] = useState(false);
+    const { data, setData, post, processing, errors } = useForm<{
+        rw_id: number;
+        rows: RTRow[];
+    }>({
+        rw_id: rwId,
+        rows: [{ nomer: '' }],
+    });
     return (
-        <Dialog>
-            <form>
-                <DialogTrigger asChild>
-                    <Button variant="default">Tambah Wilayah RT</Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
+        <>
+            <Button onClick={() => setIsOpen(true)} className="mb-4 w-1/2">
+                + Tambah RT
+            </Button>
+
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                <DialogContent className="max-w-md">
                     <DialogHeader>
-                        <DialogTitle>Tambah Wilayah RT</DialogTitle>
-                        <DialogDescription>Masukkan nama RT berdasarkan kelurahan dan rw yang ingin ditambahkan.</DialogDescription>
+                        <DialogTitle>Tambah RT</DialogTitle>
+                        <DialogDescription>Masukkan nomer RT berdasarkan kelurahan</DialogDescription>
                     </DialogHeader>
-                    <div className="grid gap-4">
-                        <div className="grid w-full max-w-sm items-center gap-3">
-                            <Label htmlFor="email">Pilih Kelurahan</Label>
-                            <Select>
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Pilih Kelurahan" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectLabel>Kelurahan</SelectLabel>
-                                        <SelectItem value="event">Event</SelectItem>
-                                        <SelectItem value="kegiatan">Kegiatan</SelectItem>
-                                        <SelectItem value="pengumuman">Pengumuman</SelectItem>
-                                        <SelectItem value="peristiwa">Peristiwa</SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
+
+                    {data.rows.map((row, index) => (
+                        <div key={index} className="mb-2 flex items-center gap-2">
+                            <Input
+                                type="text"
+                                placeholder={`RT ${index + 1}`}
+                                value={row.nomer}
+                                onChange={(e) => {
+                                    const updated = [...data.rows];
+                                    updated[index].nomer = e.target.value;
+                                    setData('rows', updated);
+                                }}
+                            />
+                            {errors[`rows.${index}.nomer`] && <p className="text-sm text-red-500">{errors[`rows.${index}.nomer`]}</p>}
                         </div>
-                        <div className="grid w-full max-w-sm items-center gap-3">
-                            <Label htmlFor="email">Pilih RW</Label>
-                            <Select>
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Pilih RW" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectLabel>RW</SelectLabel>
-                                        <SelectItem value="event">Event</SelectItem>
-                                        <SelectItem value="kegiatan">Kegiatan</SelectItem>
-                                        <SelectItem value="pengumuman">Pengumuman</SelectItem>
-                                        <SelectItem value="peristiwa">Peristiwa</SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="grid gap-3">
-                            <Label htmlFor="name-1">RT </Label>
-                            <button type="button" onClick={tambahBaris} className="rounded bg-blue-600 px-4 py-2 text-white">
-                                + Tambah Baris
-                            </button>
-                            {rows.map((row, index) => (
-                                <Input
-                                    key={index}
-                                    type="text"
-                                    value={row.nama}
-                                    onChange={(e) => {
-                                        const updated = [...rows];
-                                        updated[index].nama = e.target.value;
-                                        setRows(updated);
-                                    }}
-                                    placeholder={`Nama Wilayah ${index + 1}`}
-                                    className="input mb-2"
-                                />
-                            ))}
-                        </div>
-                    </div>
-                    <DialogFooter>
-                        <DialogClose asChild>
-                            <Button variant="outline">Cancel</Button>
-                        </DialogClose>
-                        <Button type="submit">Simpan</Button>
+                    ))}
+
+                    <Button variant="outline" onClick={() => setData('rows', [...data.rows, { nomer: '' }])}>
+                        + Tambah Baris
+                    </Button>
+
+                    <DialogFooter className="mt-4">
+                        <Button variant="secondary" onClick={() => setIsOpen(false)}>
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={() =>
+                                post(route('simpanWilayah.data_rt'), {
+                                    preserveScroll: true,
+                                    onSuccess: () => {
+                                        setData('rows', [{ nomer: '' }]);
+                                        setIsOpen(false);
+                                    },
+                                })
+                            }
+                            disabled={processing}
+                        >
+                            Simpan
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
-            </form>
-        </Dialog>
+            </Dialog>
+        </>
     );
 }
