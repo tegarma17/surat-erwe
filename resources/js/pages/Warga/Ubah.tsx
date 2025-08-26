@@ -69,9 +69,8 @@ interface Props {
     email: string;
     initialKelurahanId: number;
     initialRwId: number;
-    initialRtId: number;
 }
-export default function WargaUbah({ warga, email, kelurahans, initialKelurahanId, initialRwId, initialRtId }: Props) {
+export default function WargaUbah({ warga, email, kelurahans, initialKelurahanId, initialRwId }: Props) {
     const { data, setData, put, processing, errors } = useForm({
         nik: warga.nik,
         nama: warga.nama,
