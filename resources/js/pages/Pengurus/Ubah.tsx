@@ -16,11 +16,11 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 
     {
-        title: 'Berita',
-        href: '/berita',
+        title: 'Data Pengurus',
+        href: '/pengurus',
     },
     {
-        title: 'Edit Berita',
+        title: 'Edit Data Pengurus',
         href: '#',
     },
 ];

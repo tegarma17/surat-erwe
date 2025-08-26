@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ValidasiSurat extends Model
 {
-    protected $table = 'validasi_surats';
+    protected $table = 'validasi_surat';
     protected $fillable = [
         'surat_id',
         'jabatan_id',

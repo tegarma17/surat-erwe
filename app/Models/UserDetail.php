@@ -43,8 +43,8 @@ class UserDetail extends Model
     {
         return $this->hasOne(Jabatan::class);
     }
-    // public function surats()
-    // {
-    //     return $this->hasMany(Surat::class);
-    // }
+    public function surat()
+    {
+        return $this->hasMany(Surat::class);
+    }
 }

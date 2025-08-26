@@ -14,11 +14,11 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 
     {
-        title: 'Berita',
-        href: '/berita',
+        title: 'Pengurus',
+        href: '/pengurus',
     },
     {
-        title: 'Tambah Berita Baru',
+        title: 'Tambah Pengurus Baru',
         href: '#',
     },
 ];
@@ -37,9 +37,9 @@ export default function PengurusTambah() {
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Tambah Berita Baru" />
+            <Head title="Tambah Data Pengurus Baru" />
             <div className="mx-5 my-5 text-black">
-                <h2 className="mb-4 text-xl font-semibold">Tambah Berita</h2>
+                <h2 className="mb-4 text-xl font-semibold">Tambah Data Pengurus Baru</h2>
             </div>
             <div className="mx-5 rounded bg-white p-3 text-black shadow">
                 <form encType="multipart/form-data" className="space-y-4" onSubmit={handleSimpan}>

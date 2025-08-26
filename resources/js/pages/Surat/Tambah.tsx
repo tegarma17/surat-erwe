@@ -25,11 +25,9 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function SuratTambah() {
     const { data, setData, post, processing, errors } = useForm({
-        userDetail_id: '',
-        j_surat: '',
+        warga_id: '',
+        jenis_surat: '',
         alasan: '',
-        tingkatan: '',
-        wilayah: '',
         lampiran: null as File | null,
     });
     const handleSimpan = (e: React.FormEvent) => {
@@ -59,7 +57,7 @@ export default function SuratTambah() {
                     )}
                     <div className="grid w-full gap-3">
                         <Label>Jenis Surat</Label>
-                        <Select value={data.j_surat} onValueChange={(val) => setData('j_surat', val)}>
+                        <Select value={data.jenis_surat} onValueChange={(val) => setData('jenis_surat', val)}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Pilih Kategori Berita" />
                             </SelectTrigger>
@@ -73,59 +71,6 @@ export default function SuratTambah() {
                             </SelectContent>
                         </Select>
                     </div>
-                    <div className="grid w-full gap-3">
-                        <Label>Kategori</Label>
-                        <Select value={data.tingkatan} onValueChange={(val) => setData('tingkatan', val)}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Pilih Kategori Berita" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Tingkatan</SelectLabel>
-                                    <SelectItem value="rt">RT</SelectItem>
-                                    <SelectItem value="rw">RT - RW</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    {data.tingkatan === 'rt' && (
-                        <div className="grid w-full gap-3">
-                            <Label>Wilayah</Label>
-                            <Select value={data.wilayah} onValueChange={(val) => setData('wilayah', val)}>
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Pilih Wilayah" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectLabel>Wilayah</SelectLabel>
-                                        <SelectItem value="51">RT 51</SelectItem>
-                                        <SelectItem value="52">RT 52</SelectItem>
-                                        <SelectItem value="53">RT 53</SelectItem>
-                                        <SelectItem value="54">RT 54</SelectItem>
-                                        <SelectItem value="55">RT 55</SelectItem>
-                                        <SelectItem value="56">RT 56</SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    )}
-                    {data.tingkatan === 'rw' && (
-                        <div className="grid w-full gap-3">
-                            <Label>Wilayah</Label>
-                            <Select value={data.wilayah} onValueChange={(val) => setData('wilayah', val)}>
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Pilih Wilayah" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectLabel>Wilayah</SelectLabel>
-                                        <SelectItem value="08">RW 08</SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    )}
-
                     <div className="grid w-full gap-3">
                         <Label>Alasan</Label>
                         <Input value={data.alasan} onChange={(e) => setData('alasan', e.target.value)} />

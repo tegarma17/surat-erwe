@@ -73,7 +73,7 @@ export default function WargaIndex() {
 
             <div className="rounded-lg bg-white p-6 shadow">
                 <div className="mb-4 flex items-center justify-between">
-                    <h2 className="text-xl font-semibold text-gray-800">Data Berita Warga</h2>
+                    <h2 className="text-xl font-semibold text-gray-800">Data Warga</h2>
                     <input type="text" placeholder="Search..." className="rounded-md border px-3 py-2 text-sm text-black" />
                 </div>
 
@@ -95,7 +95,7 @@ export default function WargaIndex() {
                                     <td className="px-4 py-2">{warga.alamat}</td>
                                     <td className="flex flex-col gap-2 px-4 py-2 lg:flex-row">
                                         <Link href={route('warga.ubah', warga.id)}>
-                                            <Button variant="default">Edit</Button>
+                                            <Button className="bg-tiga text-white hover:bg-dua">Edit</Button>
                                         </Link>
 
                                         <ConfirmDeleteDialog itemName={warga.nama} onConfirm={() => handleHapus(warga.id)} nameButton="Hapus" />

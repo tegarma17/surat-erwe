@@ -22,7 +22,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 interface Surat {
     id: number;
     created_at: Date;
-    j_surat: string;
+    jenis_surat: string;
     validasi_surat?: {
         status: string;
     };
@@ -102,7 +102,7 @@ export default function SuratIndex() {
                             {surat.map((surat, i) => (
                                 <tr key={i} className="text-gray-800 transition odd:bg-white even:bg-gray-50 hover:bg-gray-100">
                                     <td className="px-4 py-2">{new Date(surat.created_at).toLocaleDateString()}</td>
-                                    <td className="px-4 py-2">{labelJenisSurat[surat.j_surat]}</td>
+                                    <td className="px-4 py-2">{labelJenisSurat[surat.jenis_surat]}</td>
                                     <td className="px-4 py-2">
                                         {surat.validasi_surat?.status === 'cek' ? (
                                             <Badge variant="secondary" className="bg-red-500 text-white">

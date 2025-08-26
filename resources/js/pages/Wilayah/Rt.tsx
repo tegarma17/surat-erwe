@@ -37,6 +37,7 @@ interface Rt {
 interface PageProps {
     flash: {
         message?: string;
+        timestamp?: number;
     };
     kelurahan: Kelurahan;
     rw: Rw;
@@ -51,7 +52,7 @@ export default function WilayahRtIndex() {
     const { processing, delete: destroy } = useForm();
 
     const handleHapus = (id: number) => {
-        destroy(route('hapus.data_rw', { id }));
+        destroy(route('hapus.data_rt', { id }));
     };
     useEffect(() => {
         if (flash.message) {
@@ -61,7 +62,7 @@ export default function WilayahRtIndex() {
             }, 2000);
             return () => clearTimeout(timer);
         }
-    }, [flash.message]);
+    }, [flash.message, flash.timestamp]);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Data Wilayah" />
@@ -99,11 +100,11 @@ export default function WilayahRtIndex() {
                     </thead>
                     <tbody>
                         {rt.length > 0 ? (
-                            rt.map((rw, i) => (
+                            rt.map((rt, i) => (
                                 <tr key={i} className="text-gray-800 transition odd:bg-white even:bg-gray-50 hover:bg-gray-100">
-                                    <td className="px-4 py-2">RT {rw.nomer}</td>
+                                    <td className="px-4 py-2">RT {rt.nomer}</td>
                                     <td className="flex gap-2 px-4 py-2">
-                                        <ConfirmDeleteDialog nameButton="Hapus RT" onConfirm={() => handleHapus(rw.id)} />
+                                        <ConfirmDeleteDialog nameButton="Hapus RT" onConfirm={() => handleHapus(rt.id)} />
                                     </td>
                                 </tr>
                             ))

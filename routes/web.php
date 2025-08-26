@@ -46,6 +46,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     route::post('/set-wilayah-kelurahan/rw/simpan', [WilayahController::class, 'simpanRw'])->name('simpanWilayah.data_rw');
     route::post('/set-wilayah-kelurahan/rw/rt/simpan', [WilayahController::class, 'simpanRt'])->name('simpanWilayah.data_rt');
     route::delete('/set-wilayah-kelurahan/rw/delete/{id}', [WilayahController::class, 'deleteRW'])->name('hapus.data_rw');
+    route::delete('/set-wilayah-kelurahan/rw/rt/delete/{id}', [WilayahController::class, 'deleteRT'])->name('hapus.data_rt');
 
 
     Route::controller(SuratController::class)->group(function () {

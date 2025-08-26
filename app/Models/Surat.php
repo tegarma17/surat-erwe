@@ -9,7 +9,7 @@ use App\Models\ValidasiSurat;
 
 class Surat extends Model
 {
-    protected $table = 'surats';
+    protected $table = 'surat';
     protected $fillable = [
         'warga_id',
         'jenis_surat',
@@ -22,7 +22,7 @@ class Surat extends Model
     }
     public function userDetail()
     {
-        return $this->belongsTo(UserDetail::class, 'userDetail_id');
+        return $this->belongsTo(UserDetail::class, 'warga_id');
     }
     public function validasiSurat()
     {

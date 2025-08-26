@@ -219,7 +219,7 @@ class WargaController extends Controller
             $warga->save();
             return redirect()->route('warga.index')->with('message', 'Data Warga berhasil diperbarui');
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan saat memperbarui berita']);
+            return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan saat memperbarui data Warga']);
         }
     }
 

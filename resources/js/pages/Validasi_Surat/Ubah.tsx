@@ -20,7 +20,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 interface Surat {
     id: number;
-    j_surat: string;
+    jenis_surat: string;
     alasan: string;
     tingkatan: string;
     wilayah: string;
@@ -131,7 +131,7 @@ export default function SuratUbah() {
                                 <div className="font-semibold">Jenis Surat</div>
                                 <div className="">
                                     : {'   '}
-                                    {labelJenisSurat[surat.j_surat]}
+                                    {labelJenisSurat[surat.jenis_surat]}
                                 </div>
                             </div>
                             <div className="grid grid-cols-3 gap-3">

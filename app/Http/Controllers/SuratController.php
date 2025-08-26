@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Surat;
-use App\Models\Berita;
 use App\Models\Jabatan;
 use App\Models\UserDetail;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ValidasiSurat;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -39,33 +37,30 @@ class SuratController extends Controller
     public function store(Request $request)
     {
         $userID = Auth::user()->id;
-        $userDetailId = UserDetail::where('user_id', $userID)->value('id');
+        $userDetailId = UserDetail::where('users_id', $userID)->value('id');
 
         $validated =  $request->validate([
-            'j_surat' => 'required',
+            'jenis_surat' => 'required',
             'alasan' => 'required',
-            'wilayah' => 'required',
-            'tingkatan' => 'required',
             'lampiran' => 'required|file|mimes:zip, rar|max:10240',
             'surat_id' => 'nullable|exists:surats,id',
             'status' => 'nullable', // Optional, for updating existing surat
         ]);
 
         $surat = [
-            'userDetail_id' => $userDetailId,
-            'j_surat' => $validated['j_surat'],
+            'warga_id' => $userDetailId,
+            'jenis_surat' => $validated['jenis_surat'],
             'alasan' => $validated['alasan'],
-            'wilayah' => $validated['wilayah'],
-            'tingkatan' => $validated['tingkatan'],
         ];
         if ($request->hasFile('lampiran')) {
             $surat['lampiran'] = $request->file('lampiran')->store('lampiran', 'public');
         }
-
         Surat::create($surat);
         $validasiSurat = [
             'surat_id' => Surat::latest()->first()->id,
             'status' => 'Proses',
+            'jabatan_id' => null,
+            'alasan' => null
         ];
         ValidasiSurat::create($validasiSurat);
 
@@ -77,17 +72,43 @@ class SuratController extends Controller
      */
     public function downloadSurat(Request $request)
     {
+        function labelKerja($kode)
+        {
+            return [
+                'pns' => 'Pegawa Negeri Sipil',
+                'wirausaha' => 'Wirausaha',
+                'aparat' => 'Polisi / TNI / Aparatur Negara',
+                'guru' => 'Guru',
+                'swasta' => 'Pegawai Swasta',
+                'mahasiswa' => 'Mahasiswa / Pelajar',
+                'petani' => 'Petani',
+                'melayan' => 'Nelayan',
+                'freelance' => 'Freelance',
+                'nakes' => 'Tenaga Kesehatan / Dokter / Bidan / Perawat',
+                'irt' => 'Ibu Rumah Tangga',
+                'pensiun' => 'Pensiun',
+                'tidak' => 'Tidak Bekerja'
+            ][$kode] ?? 'Tidak Diketahui';
+        }
         $user = Auth::user()->id;
-        $userDetail = UserDetail::where('user_id', $user)->first();
-        $surat = Surat::where('userDetail_id', $userDetail->id)->first();
+        $userDetail = UserDetail::with('rt.rw')->where('users_id', $user)->first();
+        $surat = Surat::where('warga_id', $userDetail->id)->first();
+        $validasiSurat = ValidasiSurat::where('surat_id', $surat->id)->first();
+        $jabatanRW =  Jabatan::with('warga')
+            ->where('id', $validasiSurat->jabatan_id)
+            ->where('tingkatan', 'rw')
+            ->where('jabatan', 'ket')
+            ->first();
 
+        $userDetail->pekerjaan = labelKerja($userDetail->pekerjaan);
         $viewData = [
             'userDetail' => $userDetail,
             'surat' => $surat,
+            'jabatanRw' => $jabatanRW,
         ];
-        if ($surat->j_surat == 'suket') {
+        if ($surat->jenis_surat == 'suket') {
             $pdf = Pdf::loadView('templates.surat_kustom', $viewData);
-        } elseif ($surat->j_surat == 'sudom') {
+        } elseif ($surat->jenis_surat == 'sudom') {
             $pdf = Pdf::loadView('templates.surat_domisili', $viewData);
         } else {
             $pdf = Pdf::loadView('templates.surat_pengantar', $viewData);
@@ -138,7 +159,7 @@ class SuratController extends Controller
             }
             // ✅ Simpan perubahan
             $surat->save();
-            return redirect()->route('surat.index')->with('message', 'Berita berhasil diperbarui');
+            return redirect()->route('surat.index')->with('message', 'Surat berhasil diperbarui');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan saat memperbarui surat']);
         }
@@ -154,6 +175,6 @@ class SuratController extends Controller
             Storage::disk('public')->delete($surat->lampiran);
         }
         $surat->delete();
-        return redirect()->route('surat.index')->with('message', 'Berita Berhasil dihapus');
+        return redirect()->route('surat.index')->with('message', 'Surat Berhasil dihapus');
     }
 }

@@ -84,7 +84,7 @@ export default function PengurusIndex({ pengurus, flash }: Props) {
 
     console.log(data.is_aktif);
     const handleHapus = (id: number) => {
-        destroy(route('berita.hapus', { id }));
+        destroy(route('pengurus.hapus', { id }));
     };
 
     const handleUpdateStatus = (id: number) => {

@@ -21,7 +21,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 interface Surat {
     id: number;
     created_at: Date;
-    j_surat: string;
+    jenis_surat: string;
     user_detail?: {
         nama: string;
     };
@@ -40,7 +40,7 @@ interface PageProps {
 
 export default function SuratIndex() {
     const { surat, flash } = usePage().props as unknown as PageProps;
-
+    console.log(surat);
     const [show, setShow] = useState(!!flash.message);
     const labelJenisSurat: Record<string, string> = {
         suket: 'Surat Keterangan',
@@ -106,7 +106,7 @@ export default function SuratIndex() {
                             {surat.map((surat, i) => (
                                 <tr key={i} className="text-gray-800 transition odd:bg-white even:bg-gray-50 hover:bg-gray-100">
                                     <td className="px-4 py-2">{surat.user_detail?.nama || ''}</td>
-                                    <td className="px-4 py-2">{labelJenisSurat[surat.j_surat]}</td>
+                                    <td className="px-4 py-2">{labelJenisSurat[surat.jenis_surat]}</td>
                                     <td className="px-4 py-2">{new Date(surat.created_at).toLocaleDateString()}</td>
                                     <td className="px-4 py-2">
                                         {surat.validasi_surat?.status === 'cek' ? (

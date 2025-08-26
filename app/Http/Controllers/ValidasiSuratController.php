@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Surat;
-use App\Models\Berita;
+
 use App\Models\Jabatan;
 use App\Models\UserDetail;
 use App\Models\ValidasiSurat;
-use Illuminate\Support\Str;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -21,9 +21,9 @@ class ValidasiSuratController extends Controller
     public function index()
     {
         $user = Auth::user()->id;
-        $userDetailID = UserDetail::where('user_id', $user)->value('id');
-        $jabatanID = Jabatan::where('user_detail_id', $userDetailID)->first();
-        $surat = Surat::with(['validasiSurat', 'userDetail'])->where('tingkatan', $jabatanID['tingkatan'])->where('wilayah', $jabatanID['wilayah'])->get();
+        $userDetailID = UserDetail::where('users_id', $user)->value('id');
+        $jabatanID = Jabatan::where('warga_id', $userDetailID)->first();
+        $surat = Surat::with(['validasiSurat', 'userDetail'])->get();
 
         return Inertia::render('Validasi_Surat/Index', compact('surat'));
     }
@@ -75,8 +75,8 @@ class ValidasiSuratController extends Controller
     public function update(Request $request, ValidasiSurat $validasi_surat)
     {
         $user = Auth::user()->id;
-        $userDetailId = UserDetail::wherE('user_id', $user)->value('id');
-        $jabatanId = Jabatan::where('user_detail_id', $userDetailId)->first();
+        $userDetailId = UserDetail::wherE('users_id', $user)->value('id');
+        $jabatanId = Jabatan::where('warga_id', $userDetailId)->first();
         try {
             $validasi_surat->update([
                 'status' => $request->input('status'),
@@ -84,7 +84,7 @@ class ValidasiSuratController extends Controller
             ]);
 
 
-            return redirect()->route('validasi.index')->with('message', 'Berita berhasil diperbarui');
+            return redirect()->route('validasi.index')->with('message', 'Validasi Surat berhasil diperbarui');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan saat memperbarui surat']);
         }
@@ -100,6 +100,6 @@ class ValidasiSuratController extends Controller
             Storage::disk('public')->delete($surat->lampiran);
         }
         $surat->delete();
-        return redirect()->route('surat.index')->with('message', 'Berita Berhasil dihapus');
+        return redirect()->route('surat.index')->with('message', 'Validasi Surat Berhasil dihapus');
     }
 }
