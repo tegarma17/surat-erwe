@@ -40,6 +40,13 @@ jobs:
       - name: Install Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
+      - name: Setup Laravel
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          php artisan migrate --env=testing
+          php artisan db:seed --env=testing
+
       - name: Copy Environment File
         run: cp .env.example .env
 
