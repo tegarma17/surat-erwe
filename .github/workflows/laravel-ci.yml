@@ -1,4 +1,4 @@
-name: Laravel Test
+name: Laravel CI
 
 on: [push, pull_request]
 
@@ -12,24 +12,34 @@ jobs:
         env:
           MYSQL_DATABASE: erwe-surat
           MYSQL_USER: root
-          MYSQL_PASSWORD:
+          MYSQL_PASSWORD: root
+          MYSQL_ROOT_PASSWORD: root
         options: >-
           --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+        command: --default-authentication-plugin=mysql_native_password
+
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd="redis-cli ping"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
-          extensions: mbstring, pdo_mysql
+          php-version: '8.3'
+          extensions: mbstring, pdo_mysql, redis
 
-      - name: Install dependencies
+      - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Copy .env.testing
@@ -52,5 +62,16 @@ jobs:
       - name: Seed database
         run: php artisan db:seed --env=testing
 
-      - name: Run tests
+      - name: Run Laravel tests
         run: php artisan test --env=testing
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build frontend (Vite)
+        run: npm run build
