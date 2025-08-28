@@ -15,16 +15,16 @@ class WilayahSeeder extends Seeder
      */
     public function run(): void
     {
-        Kelurahan::factory()
-            ->count(3)
-            ->has(
-                Rw::factory()
-                    ->count(2)
-                    ->has(
-                        Rt::factory()
-                            ->count(3)
-                    )
-            )
-            ->create();
+        // Kelurahan::factory()
+        //     ->count(3)
+        //     ->has(
+        //         Rw::factory()
+        //             ->count(2)
+        //             ->has(
+        //                 Rt::factory()
+        //                     ->count(3)
+        //             )
+        //     )
+        //     ->create();
     }
 }

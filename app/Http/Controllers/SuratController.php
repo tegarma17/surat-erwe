@@ -19,7 +19,11 @@ class SuratController extends Controller
      */
     public function index()
     {
-        $surat = Surat::with(['validasiSurat'])->get();
+        $user = Auth::id();
+        $warga = UserDetail::where('users_id', $user)->first();
+        $surat = Surat::with(['validasiSurat'])
+            ->where('warga_id', $warga->id)
+            ->get();
         return Inertia::render('Surat/Index', compact('surat'));
     }
 
@@ -70,7 +74,7 @@ class SuratController extends Controller
     /**
      * Display the specified resource.
      */
-    public function downloadSurat(Request $request)
+    public function downloadSurat(string $id)
     {
         function labelKerja($kode)
         {
@@ -92,19 +96,14 @@ class SuratController extends Controller
         }
         $user = Auth::user()->id;
         $userDetail = UserDetail::with('rt.rw')->where('users_id', $user)->first();
-        $surat = Surat::where('warga_id', $userDetail->id)->first();
-        $validasiSurat = ValidasiSurat::where('surat_id', $surat->id)->first();
-        $jabatanRW =  Jabatan::with('warga')
-            ->where('id', $validasiSurat->jabatan_id)
-            ->where('tingkatan', 'rw')
-            ->where('jabatan', 'ket')
-            ->first();
-
+        $surat = Surat::findOrFail($id);
+        $validasiSurat = ValidasiSurat::with(['surat', 'jabatan.warga.rt.rw'])->where('surat_id', $surat->id)->first();
+        $cekJabatan = Jabatan::where('ket', 'rw')->get();
+        dd($validasiSurat);
         $userDetail->pekerjaan = labelKerja($userDetail->pekerjaan);
         $viewData = [
             'userDetail' => $userDetail,
             'surat' => $surat,
-            'jabatanRw' => $jabatanRW,
         ];
         if ($surat->jenis_surat == 'suket') {
             $pdf = Pdf::loadView('templates.surat_kustom', $viewData);

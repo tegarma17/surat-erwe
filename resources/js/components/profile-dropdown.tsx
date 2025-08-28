@@ -1,7 +1,6 @@
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Link, usePage } from '@inertiajs/react';
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
-import logo from '../../../public/logo.png';
 
 interface SharedData {
     auth: {
@@ -21,18 +20,21 @@ export default function ProfileDropdown() {
 
     // const { state } = useSidebar();
     // const isMobile = useIsMobile();
+    const foto = auth.user?.user_detail?.foto;
+    const src = foto ? `/storage/${foto}` : '/logo.png';
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <button className="h-8 w-8 overflow-hidden rounded-full">
-                    <img src={auth.user.user_detail?.foto ?? logo} alt="Profile" />
+                    <img src={src} alt="Profile" />
                 </button>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent side="bottom" align="end" className="z-50 w-64 rounded border border-gray-100 bg-white p-2 shadow-md">
                 <div className="px-3 py-2">
-                    <p className="text-sm font-medium text-gray-900">{auth.user.user_detail?.nama ?? 'Guest'}</p>
-                    <p className="text-xs text-gray-500">{auth.user.email}</p>
+                    <p className="text-sm font-medium text-gray-900">{auth?.user?.user_detail?.nama ?? 'Guest'}</p>
+                    <p className="text-xs text-gray-500">{auth?.user?.email}</p>
                 </div>
                 <DropdownMenuSeparator className="my-2 h-px bg-gray-200" />
 

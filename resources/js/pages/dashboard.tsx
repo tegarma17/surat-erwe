@@ -10,21 +10,21 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/dashboard',
     },
 ];
-interface User {
-    id: number;
-    name: string;
-    email: string;
-    role?: string; // kalau kamu pakai role
+interface Auth {
+    user: {
+        id: number;
+        name: string;
+    };
 }
 
 export default function Dashboard() {
-    const { user } = usePage<{ user: User }>().props;
-
+    const { auth } = usePage<{ auth: Auth }>().props;
+    console.log(auth);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <h1>Selamat Datang, {user.name}</h1>
+                <h1>Selamat Datang, {auth?.user?.name ?? 'Guest'}</h1>
                 <div className="grid auto-rows-min gap-4 md:grid-cols-2">
                     <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-md md:p-6 dark:border-gray-300 dark:bg-white/[0.03]">
                         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100 dark:bg-empat">

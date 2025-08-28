@@ -32,10 +32,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
-        return Inertia::render('dashboard', [
-            'auth' => Auth::id() ? User::with('user_detail')->find(Auth::id()) : null,
-
-        ]);
+        return Inertia::render('dashboard');
     })->name('dashboard');
     route::get('/user-account', [UserController::class, 'index'])->name('user.account');
 

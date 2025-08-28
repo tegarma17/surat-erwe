@@ -21,11 +21,18 @@ class ValidasiSuratController extends Controller
     public function index()
     {
         $user = Auth::user()->id;
-        $userDetailID = UserDetail::where('users_id', $user)->value('id');
-        $jabatanID = Jabatan::where('warga_id', $userDetailID)->first();
-        $surat = Surat::with(['validasiSurat', 'userDetail'])->get();
+        $userDetailID = UserDetail::where('users_id', $user)->first();
+        $rtId = $userDetailID->rt_id;
+        $jabatanID = Jabatan::where('warga_id', $userDetailID->id)->first();
+        if ($jabatanID->jabatan === 'ket') {
+            $surat = Surat::with(['validasiSurat', 'userDetail'])
+                ->whereHas('userDetail', function ($query) use ($rtId) {
+                    $query->where('rt_id',  $rtId);
+                })
+                ->get();
 
-        return Inertia::render('Validasi_Surat/Index', compact('surat'));
+            return Inertia::render('Validasi_Surat/Index', compact('surat'));
+        }
     }
 
     /**
@@ -55,6 +62,13 @@ class ValidasiSuratController extends Controller
     public function edit(string $id)
     {
         $surat = Surat::with(['validasiSurat', 'userDetail'])->findOrfail($id);
+        $userRtId = Auth::user()->user_detail->rt_id;
+        $suratRtid = $surat->userDetail->rt_id;
+
+        if ($userRtId !== $suratRtid) {
+            abort(403, 'Anda tidak memiliki akses ke surat ini.');
+        }
+
         return Inertia::render('Validasi_Surat/Ubah', compact('surat'));
     }
     public function download($id)

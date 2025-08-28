@@ -46,6 +46,6 @@ class UserSeeder extends Seeder
                 ],
             ]
         );
-        UserDetail::factory()->count(10)->create();
+        // UserDetail::factory()->count(10)->create();
     }
 }
