@@ -1,22 +1,23 @@
 <?php
 
-use App\Http\Controllers\UserController;
+use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Berita;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\BeritaController;
-use App\Http\Controllers\JabatanController;
-use App\Http\Controllers\SuratController;
-use App\Http\Controllers\ValidasiSuratController;
-use App\Http\Controllers\WargaController;
-use App\Http\Controllers\WilayahController;
 use App\Models\ValidasiSurat;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\SuratController;
+use App\Http\Controllers\WargaController;
+use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\JabatanController;
+use App\Http\Controllers\WilayahController;
+use App\Http\Controllers\ValidasiSuratController;
 
 
 Route::get('/', function () {
-    $beritas = Berita::orderBy('created_at', 'desc')->take(5)->get()->map(function ($item) {
+    $beritas = Berita::orderBy('created_at', 'desc')->take(7)->get()->map(function ($item) {
         return [
             'id' => $item->id,
             'judul' => $item->judul,
@@ -32,21 +33,26 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard', [
-            'user' => Auth::user(),
+            'auth' => Auth::id() ? User::with('user_detail')->find(Auth::id()) : null,
+
         ]);
     })->name('dashboard');
     route::get('/user-account', [UserController::class, 'index'])->name('user.account');
 
 
-    route::get('/set-wilayah', [WilayahController::class, 'index'])->name('wilayah.index');
-    route::post('/set-wilayah-kelurahan', [WilayahController::class, 'storeKelurahan'])->name('wilayah.simpan_kelurahan');
-    route::delete('/delete-wilayah-kelurahan/{id}', [WilayahController::class, 'deleteKelurahan'])->name('wilayah.delete_kelurahan');
-    route::get('/set-wilayah-kelurahan/rw/{id}', [WilayahController::class, 'showDataKelurahan'])->name('wilayah.data_rw');
-    route::get('/set-wilayah-kelurahan/rw/rt/{id}', [WilayahController::class, 'showDataRw'])->name('wilayah.data_rt');
-    route::post('/set-wilayah-kelurahan/rw/simpan', [WilayahController::class, 'simpanRw'])->name('simpanWilayah.data_rw');
-    route::post('/set-wilayah-kelurahan/rw/rt/simpan', [WilayahController::class, 'simpanRt'])->name('simpanWilayah.data_rt');
-    route::delete('/set-wilayah-kelurahan/rw/delete/{id}', [WilayahController::class, 'deleteRW'])->name('hapus.data_rw');
-    route::delete('/set-wilayah-kelurahan/rw/rt/delete/{id}', [WilayahController::class, 'deleteRT'])->name('hapus.data_rt');
+    Route::controller(WilayahController::class)->group(function () {
+
+        route::get('/set-wilayah', 'index')->name('wilayah.index');
+        route::post('/set-wilayah-kelurahan', 'storeKelurahan')->name('wilayah.simpan_kelurahan');
+        route::delete('/delete-wilayah-kelurahan/{id}', 'deleteKelurahan')->name('wilayah.delete_kelurahan');
+        route::get('/set-wilayah-kelurahan/rw/{id}', 'showDataKelurahan')->name('wilayah.data_rw');
+        route::get('/set-wilayah-kelurahan/rw/rt/{id}', 'showDataRw')->name('wilayah.data_rt');
+        route::post('/set-wilayah-kelurahan/rw/simpan', 'simpanRw')->name('simpanWilayah.data_rw');
+        route::post('/set-wilayah-kelurahan/rw/rt/simpan', 'simpanRt')->name('simpanWilayah.data_rt');
+        route::delete('/set-wilayah-kelurahan/rw/delete/{id}', 'deleteRW')->name('hapus.data_rw');
+        route::delete('/set-wilayah-kelurahan/rw/rt/delete/{id}', 'deleteRT')->name('hapus.data_rt');
+        route::put('/update-wilayah-kelurahan/{kelurahan}', 'updateKelurahan')->name('updateKelurahan.save');
+    });
 
 
     Route::controller(SuratController::class)->group(function () {
@@ -82,6 +88,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/warga/{id}/edit',  'edit')->name('warga.ubah');
         Route::put('/warga/{warga}',  'update')->name('warga.update');
         Route::delete('/warga/{id}',  'destroy')->name('warga.hapus');
+        Route::put('/update-status-warga/{warga}', 'updateStatusWarga')->name('wargaStatus.update');
     });
     Route::controller(BeritaController::class)->group(function () {
 

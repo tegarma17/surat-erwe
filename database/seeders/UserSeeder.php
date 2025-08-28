@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\UserDetail;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -45,5 +46,6 @@ class UserSeeder extends Seeder
                 ],
             ]
         );
+        UserDetail::factory()->count(10)->create();
     }
 }

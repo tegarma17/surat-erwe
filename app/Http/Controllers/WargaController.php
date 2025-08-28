@@ -19,7 +19,7 @@ class WargaController extends Controller
      */
     public function index()
     {
-        $warga = UserDetail::all();
+        $warga = UserDetail::paginate(7);
         return Inertia::render('Warga/Index', compact('warga'));
     }
 
@@ -204,6 +204,7 @@ class WargaController extends Controller
                 'sts_pernikahan' => $validated['sts_pernikahan'],
                 'pekerjaan' => $validated['pekerjaan'],
                 'no_hp' => $validated['no_hp'],
+                'is_aktif' => $request->input('is_aktif'),
             ]);
             // ✅ Cari data yang mau di-update
             if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
@@ -221,6 +222,13 @@ class WargaController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan saat memperbarui data Warga']);
         }
+    }
+    public function updateStatusWarga(Request $request, UserDetail $warga)
+    {
+        $warga->update([
+            'is_aktif' => $request->input('is_aktif')
+        ]);
+        return redirect()->back()->with('message', 'Nama Kelurahan berhasil diperbarui');
     }
 
     /**

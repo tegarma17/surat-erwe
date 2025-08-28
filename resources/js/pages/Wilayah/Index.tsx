@@ -1,11 +1,12 @@
 import { ConfirmDeleteDialog } from '@/components/confirm-delete-dialog';
+import { DialogEditWilayah } from '@/components/dialog-edit-wilayah';
 import { DialogWilayah } from '@/components/dialog-wilayah';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import { CheckCircle2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 const breadcrumbs: BreadcrumbItem[] = [
@@ -19,6 +20,20 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '#',
     },
 ];
+interface Pagination<T> {
+    data: T[];
+    links: {
+        url: string | null;
+        label: string;
+        active: boolean;
+    }[];
+    meta: {
+        current_page: number;
+        last_page: number;
+        per_page: number;
+        total: number;
+    };
+}
 
 interface Kelurahan {
     id: number;
@@ -29,15 +44,13 @@ interface PageProps {
     flash: {
         message?: string;
     };
-    kelurahan: Kelurahan[];
+    kelurahan: Pagination<Kelurahan>;
 }
 
 export default function WilayahIndex() {
     const { kelurahan, flash } = usePage().props as unknown as PageProps;
     const [show, setShow] = useState(!!flash.message);
-
     const { delete: destroy } = useForm();
-
     const handleHapus = (id: number) => {
         destroy(route('wilayah.delete_kelurahan', { id }));
     };
@@ -81,14 +94,15 @@ export default function WilayahIndex() {
                         </tr>
                     </thead>
                     <tbody>
-                        {kelurahan.length > 0 ? (
-                            kelurahan.map((kelurahan, i) => (
+                        {kelurahan.data.length > 0 ? (
+                            kelurahan.data.map((kelurahan, i) => (
                                 <tr key={i} className="text-gray-800 transition odd:bg-white even:bg-gray-50 hover:bg-gray-100">
                                     <td className="px-4 py-2">{kelurahan.nama}</td>
                                     <td className="flex gap-2 px-4 py-2">
                                         <Link href={route('wilayah.data_rw', kelurahan.id)}>
                                             <Button variant="default">Lihat RW</Button>
                                         </Link>
+                                        <DialogEditWilayah nameButton="Edit Nama Dusun" kelurahan={kelurahan} />
                                         <ConfirmDeleteDialog nameButton="Hapus Dusun" onConfirm={() => handleHapus(kelurahan.id)} />
                                     </td>
                                 </tr>
@@ -98,14 +112,21 @@ export default function WilayahIndex() {
                         )}
                     </tbody>
                 </table>
-                {kelurahan.length === 0 ? (
+                {kelurahan.data.length === 0 ? (
                     <div className="mt-4 text-center text-sm text-gray-500 italic">Tidak ada data untuk ditampilkan.</div>
                 ) : (
                     <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
-                        <span>Showing {kelurahan.length} entries</span>
-                        <div className="space-x-2">
-                            <button className="rounded border px-2 py-1 hover:bg-gray-100">Previous</button>
-                            <button className="rounded border px-2 py-1 hover:bg-gray-100">Next</button>
+                        <span>Showing {kelurahan.data.length} entries</span>
+                        <div className="mt-4 flex gap-2">
+                            {kelurahan.links.map((link, i) => (
+                                <button
+                                    key={i}
+                                    disabled={!link.url}
+                                    className={`rounded border px-2 py-1 ${link.active ? 'bg-blue-500 text-white' : 'hover:bg-gray-100'}`}
+                                    onClick={() => link.url && router.visit(link.url)}
+                                    dangerouslySetInnerHTML={{ __html: link.label }}
+                                />
+                            ))}
                         </div>
                     </div>
                 )}

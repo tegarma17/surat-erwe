@@ -15,7 +15,7 @@ class BeritaController extends Controller
      */
     public function index()
     {
-        $berita = Berita::all();
+        $berita = Berita::paginate(7);
         return Inertia::render('Berita/Index', compact('berita'));
     }
 

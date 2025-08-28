@@ -170,19 +170,18 @@ export default function Welcome() {
                 </div>
             </section>
 
-            <section className="bg-white p-5"></section>
             {/* Visi MIsi */}
-            <section className="bg-white">
-                <div className="flex h-[33rem] flex-col items-center justify-center gap-3 px-4 text-center font-satu text-lg shadow-lg lg:flex-row">
+            <section className="mt-36 bg-white lg:mt-5">
+                <div className="flex h-[25rem] flex-col items-center justify-center gap-3 px-4 text-center font-satu text-lg lg:flex-row">
                     <motion.div
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         transition={{ duration: 1.1 }}
                         className="flex h-3/4 flex-col items-center justify-center rounded-md bg-lima shadow-lg"
                     >
-                        <PiLampPendantLight className="my-5 text-center text-4xl text-empat" />
-                        <h1 className="font-satu text-2xl font-bold">Visi</h1>
-                        <p className="p-3 text-sm">
+                        <PiLampPendantLight className="my-5 text-center text-4xl text-white" />
+                        <h1 className="font-satu text-2xl font-bold text-white">Visi</h1>
+                        <p className="p-3 text-sm text-white">
                             Penggunaan sistem digital dalam pembuatan surat RW dapat mempercepat proses, mengurangi kesalahan, dan membuat arsip lebih
                             mudah diakses.
                         </p>
@@ -193,14 +192,14 @@ export default function Welcome() {
                         transition={{ duration: 1.1 }}
                         className="my-5 flex h-3/4 flex-col items-center justify-center rounded-md bg-lima shadow-lg"
                     >
-                        <MdMenuBook className="my-5 text-center text-4xl text-empat" />
-                        <h1 className="font-satu text-2xl font-bold">Misi</h1>
+                        <MdMenuBook className="my-5 text-center text-4xl text-white" />
+                        <h1 className="font-satu text-2xl font-bold text-white">Misi</h1>
                         <div className="p-3">
-                            <p className="my-2 text-sm">
+                            <p className="my-2 text-sm text-white">
                                 1 Meningkatkan Efisiensi dan Aksesibilitas Proses pembuatan dan distribusi surat harus mudah dilakukan oleh warga,
                                 baik secara manual maupun digital.
                             </p>
-                            <p className="text-sm">
+                            <p className="text-sm text-white">
                                 2 Mendorong Digitalisasi dalam Administrasi RW Menggunakan sistem berbasis web atau aplikasi untuk mempermudah
                                 pengarsipan, validasi, dan pembuatan surat secara otomatis.
                             </p>
@@ -210,11 +209,11 @@ export default function Welcome() {
             </section>
 
             {/* Keunggulan */}
-            <section className="">
+            <section className="mt-30">
                 <div>
-                    <h1 className="bg-tiga p-5 text-center font-satu text-2xl font-extrabold shadow-md">Service Us</h1>
+                    <h1 className="p-5 text-center font-satu text-2xl font-extrabold">Service Us</h1>
                 </div>
-                <div className="flex flex-col items-center justify-evenly gap-3 bg-tiga p-4 md:flex-row lg:flex-row">
+                <div className="flex flex-col items-center justify-evenly gap-3 p-4 md:flex-row lg:flex-row">
                     {/* <!-- Card 1 --> */}
                     <div className="h-[18rem] w-64 overflow-hidden rounded-lg bg-white shadow-md">
                         <img className="mx-auto mt-3 h-fit w-1/2" src={easy} alt="Image 1" />
@@ -243,7 +242,7 @@ export default function Welcome() {
             </section>
 
             {/* layanan */}
-            <section className="bg-white">
+            <section className="bg-white shadow-lg">
                 <div>
                     <h1 className="p-5 text-center font-satu text-2xl font-extrabold text-empat">Melayani </h1>
                 </div>
@@ -411,12 +410,12 @@ export default function Welcome() {
                     <div className="flex flex-row items-center justify-center gap-5 px-4">
                         <button
                             onClick={prevItems}
-                            className="hidden rounded-md bg-button-primary px-6 py-3 transition hover:bg-blue-700 disabled:opacity-50 lg:block"
+                            className="hidden rounded-md bg-button-primary px-6 py-3 text-white transition hover:bg-blue-700 disabled:opacity-50 lg:block"
                             disabled={index === 0}
                         >
                             Sebelumnya
                         </button>
-                        <div className="mt-5 mb-5 grid grid-cols-1 gap-5 md:mx-5 md:grid-cols-3 lg:grid-cols-4">
+                        <div className="mt-5 mb-5 grid grid-cols-1 gap-5 md:mx-5 lg:grid-cols-4">
                             {listBerita
                                 .slice(index, index + itemsPerPage)
                                 .map((item: { foto: string; judul: string; isi_berita: string; slug: string }, i: number) => (
@@ -425,7 +424,7 @@ export default function Welcome() {
                                         whileInView={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 1.1 }}
                                         key={i}
-                                        className="mx-auto flex min-h-[300px] flex-col justify-between rounded-lg bg-white p-4 shadow"
+                                        className="flex flex-col gap-2 rounded-lg bg-white p-4 shadow"
                                     >
                                         <img src={item.foto} alt={item.foto} className="h-48 w-full rounded-md object-cover" />
 
@@ -435,7 +434,7 @@ export default function Welcome() {
 
                                             <Link
                                                 href={`/berita/${item.slug}`}
-                                                className="rounded-md bg-button-primary px-6 py-3 transition hover:bg-blue-700"
+                                                className="rounded-md bg-button-primary px-6 py-3 text-white transition hover:bg-blue-700"
                                             >
                                                 Selengkapnya
                                             </Link>
@@ -445,7 +444,7 @@ export default function Welcome() {
                         </div>
                         <button
                             onClick={nextItems}
-                            className="hidden rounded-md bg-button-primary px-6 py-3 transition hover:bg-blue-700 disabled:opacity-50 lg:block"
+                            className="hidden rounded-md bg-button-primary px-6 py-3 text-white transition hover:bg-blue-700 disabled:opacity-50 lg:block"
                             disabled={index + itemsPerPage >= listBerita.length}
                         >
                             Selanjutnya

@@ -18,7 +18,7 @@ class WilayahController extends Controller
      */
     public function index()
     {
-        $kelurahan = Kelurahan::all();
+        $kelurahan = Kelurahan::paginate(5);
         return Inertia::render('Wilayah/Index', compact('kelurahan'));
     }
 
@@ -125,6 +125,17 @@ class WilayahController extends Controller
             'message' => 'RW Telah di hapus',
             'timestamp' => now()->timestamp
         ]);
+    }
+    public function updateKelurahan(Request $request, Kelurahan $kelurahan)
+    {
+
+        $validated = $request->validate([
+            'nama' => 'required'
+        ]);
+        $kelurahan->update([
+            'nama' => $validated['nama']
+        ]);
+        return redirect()->back()->with('message', 'Nama Kelurahan berhasil diperbarui');
     }
     /**
      * Display the specified resource.

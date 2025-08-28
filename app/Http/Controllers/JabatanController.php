@@ -26,7 +26,7 @@ class JabatanController extends Controller
      */
     public function create()
     {
-        $userDetail = UserDetail::all();
+        $userDetail = UserDetail::whereDoesntHave('jabatan')->get();
         return Inertia::render('Pengurus/Tambah', compact('userDetail'));
     }
 

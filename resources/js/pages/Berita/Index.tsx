@@ -3,7 +3,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, useForm, usePage, router } from '@inertiajs/react';
 import { CheckCircle2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 const breadcrumbs: BreadcrumbItem[] = [
@@ -18,6 +18,20 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+interface Pagination<T> {
+    data: T[];
+    links: {
+        url: string | null;
+        label: string;
+        active: boolean;
+    }[];
+    meta: {
+        current_page: number;
+        last_page: number;
+        per_page: number;
+        total: number;
+    };
+}
 interface Berita {
     id: number;
     judul: string;
@@ -29,7 +43,7 @@ interface PageProps {
     flash: {
         message?: string;
     };
-    berita: Berita[];
+    berita: Pagination<Berita>;
 }
 
 export default function BeritaIndex() {
@@ -75,7 +89,7 @@ export default function BeritaIndex() {
                     <input type="text" placeholder="Search..." className="rounded-md border px-3 py-2 text-sm text-black" />
                 </div>
 
-                {berita.length > 0 && (
+                {berita.data.length > 0 && (
                     <table className="min-w-full divide-y divide-gray-200 text-sm">
                         <thead className="bg-gray-100">
                             <tr>
@@ -86,16 +100,16 @@ export default function BeritaIndex() {
                             </tr>
                         </thead>
                         <tbody>
-                            {berita.map((berita, i) => (
+                            {berita.data.map((berita, i) => (
                                 <tr key={i} className="text-gray-800 transition odd:bg-white even:bg-gray-50 hover:bg-gray-100">
                                     <td className="px-4 py-2">{berita.judul}</td>
-                                    <td className="px-4 py-2">{berita.kategori}</td>
+                                    <td className="px-4 py-2 capitalize">{berita.kategori}</td>
                                     <td className="px-4 py-2">{new Date(berita.created_at).toLocaleDateString()}</td>
                                     <td className="flex gap-2 px-4 py-2">
                                         <Link href={route('berita.ubah', berita.id)}>
                                             <Button variant="default">Edit</Button>
                                         </Link>
-                                        <ConfirmDeleteDialog itemName={berita.judul} onConfirm={() => handleHapus(berita.id)} />
+                                        <ConfirmDeleteDialog itemName={berita.judul} onConfirm={() => handleHapus(berita.id)} nameButton="Hapus" />
                                     </td>
                                 </tr>
                             ))}
@@ -104,10 +118,17 @@ export default function BeritaIndex() {
                 )}
 
                 <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
-                    <span>Showing {berita.length} entries</span>
-                    <div className="space-x-2">
-                        <button className="rounded border px-2 py-1 hover:bg-gray-100">Previous</button>
-                        <button className="rounded border px-2 py-1 hover:bg-gray-100">Next</button>
+                    <span>Showing {berita.data.length} entries</span>
+                    <div className="mt-4 flex gap-2">
+                        {berita.links.map((link, i) => (
+                            <button
+                                key={i}
+                                disabled={!link.url}
+                                className={`rounded border px-2 py-1 ${link.active ? 'bg-blue-500 text-white' : 'hover:bg-gray-100'}`}
+                                onClick={() => link.url && router.visit(link.url)}
+                                dangerouslySetInnerHTML={{ __html: link.label }}
+                            />
+                        ))}
                     </div>
                 </div>
             </div>

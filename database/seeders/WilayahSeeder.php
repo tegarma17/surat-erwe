@@ -15,22 +15,16 @@ class WilayahSeeder extends Seeder
      */
     public function run(): void
     {
-        Kelurahan::insert([
-            'nama' => 'Grabagan'
-        ]);
-        Rw::insert([
-            'kelurahan_id' => 1,
-            'nomer' => '08'
-        ]);
-        Rt::insert(
-            [
-                ['rw_id' => 1, 'nomer' => '51'],
-                ['rw_id' => 1, 'nomer' => '52'],
-                ['rw_id' => 1, 'nomer' => '53'],
-                ['rw_id' => 1, 'nomer' => '54'],
-                ['rw_id' => 1, 'nomer' => '55'],
-                ['rw_id' => 1, 'nomer' => '56'],
-            ]
-        );
+        Kelurahan::factory()
+            ->count(3)
+            ->has(
+                Rw::factory()
+                    ->count(2)
+                    ->has(
+                        Rt::factory()
+                            ->count(3)
+                    )
+            )
+            ->create();
     }
 }
