@@ -20,20 +20,19 @@ class ValidasiSuratController extends Controller
      */
     public function index()
     {
-        $user = Auth::user()->id;
-        $userDetailID = UserDetail::where('users_id', $user)->first();
-        $rtId = $userDetailID->rt_id;
-        $jabatanID = Jabatan::where('warga_id', $userDetailID->id)->first();
-        if ($jabatanID->jabatan === 'ket') {
-            $surat = Surat::with(['validasiSurat', 'userDetail'])
-                ->whereHas('userDetail', function ($query) use ($rtId) {
-                    $query->where('rt_id',  $rtId);
-                })
-                ->get();
+        $wargaId = Auth::user()->user_detail->id;
 
-            return Inertia::render('Validasi_Surat/Index', compact('surat'));
-        }
+        $userDetail = UserDetail::find($wargaId);
+        $jabatanRT = Jabatan::where('warga_id', $wargaId)
+            ->where('tingkatan', 'rt')
+            ->firstOrFail();
+        $validasiSurat = ValidasiSurat::with('surat.userDetail', 'surat.jenisSurat')
+            ->where('jabatan_id', $jabatanRT->id)
+            ->where('status_validasi', 'cek') // atau status lain yang relevan
+            ->get();
+        return Inertia::render('Validasi_Surat/Index', compact('validasiSurat'));
     }
+
 
     /**
      * Show the form for creating a new resource.

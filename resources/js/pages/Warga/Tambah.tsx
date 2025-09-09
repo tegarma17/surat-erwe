@@ -358,14 +358,14 @@ export default function WargaTambah({ kelurahans }: Props) {
                                     <SelectGroup>
                                         <SelectLabel>Pekerjaan</SelectLabel>
                                         <SelectItem value="pns">Pegawa Negeri Sipil</SelectItem>
-                                        <SelectItem value="wirausaha">Wirausaha</SelectItem>
                                         <SelectItem value="aparat">Polisi / TNI / Aparatur Negara</SelectItem>
-                                        <SelectItem value="guru">Guru</SelectItem>
                                         <SelectItem value="swasta">Pegawai Swasta</SelectItem>
-                                        <SelectItem value="mahasiswa">Mahasiswa / Pelajar</SelectItem>
+                                        <SelectItem value="wirausaha">Wirausaha</SelectItem>
                                         <SelectItem value="petani">Petani</SelectItem>
                                         <SelectItem value="melayan">Nelayan</SelectItem>
+                                        <SelectItem value="mahasiswa">Mahasiswa / Pelajar</SelectItem>
                                         <SelectItem value="freelance">Freelance</SelectItem>
+                                        <SelectItem value="guru">Guru</SelectItem>
                                         <SelectItem value="nakes">Tenaga Kesehatan / Dokter / Bidan / Perawat</SelectItem>
                                         <SelectItem value="irt">Ibu Rumah Tangga</SelectItem>
                                         <SelectItem value="pensiun">Pensiun</SelectItem>
@@ -409,6 +409,8 @@ export default function WargaTambah({ kelurahans }: Props) {
                                         <SelectLabel>Status Pernikahan</SelectLabel>
                                         <SelectItem value="belum">Belum Menikah</SelectItem>
                                         <SelectItem value="sudah">Sudah Menikah</SelectItem>
+                                        <SelectItem value="cerai_hidup">Cerai Hidup</SelectItem>
+                                        <SelectItem value="cerai_mati">Cerai Mati</SelectItem>
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>

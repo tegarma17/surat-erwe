@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import { BadgeCheck, Ban, CheckCircle2Icon, Loader2Icon, Timer } from 'lucide-react';
+import { BadgeCheck, CheckCircle2Icon, Loader2Icon, Timer } from 'lucide-react';
 import { useEffect, useState } from 'react';
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -22,10 +22,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 interface Surat {
     id: number;
     created_at: Date;
-    jenis_surat: string;
-    validasi_surat?: {
-        status: string;
+    jenis_surat?: {
+        nama_surat: string;
     };
+    status: string;
 
     // Add other fields as needed
 }
@@ -45,7 +45,7 @@ export default function SuratIndex() {
         supen: 'Surat Pengantar',
     };
     const labelStatusSurat: Record<string, string> = {
-        cek: 'Ditolak',
+        cek: 'Cek',
         proses: 'Proses',
         selesai: 'Selesai',
     };
@@ -93,7 +93,7 @@ export default function SuratIndex() {
                         <thead className="bg-gray-100">
                             <tr>
                                 <th className="px-4 py-2 text-left font-medium text-gray-600">Tanggal dibuat</th>
-                                <th className="px-4 py-2 text-left font-medium text-gray-600">Jenis</th>
+                                <th className="px-4 py-2 text-left font-medium text-gray-600">Jenis Surat</th>
                                 <th className="px-4 py-2 text-left font-medium text-gray-600">Status Surat</th>
                                 <th className="px-4 py-2 text-left font-medium text-gray-600">Action</th>
                             </tr>
@@ -102,34 +102,34 @@ export default function SuratIndex() {
                             {surat.map((surat, i) => (
                                 <tr key={i} className="text-gray-800 transition odd:bg-white even:bg-gray-50 hover:bg-gray-100">
                                     <td className="px-4 py-2">{new Date(surat.created_at).toLocaleDateString()}</td>
-                                    <td className="px-4 py-2">{labelJenisSurat[surat.jenis_surat]}</td>
+                                    <td className="px-4 py-2">{surat.jenis_surat?.nama_surat}</td>
                                     <td className="px-4 py-2">
-                                        {surat.validasi_surat?.status === 'cek' ? (
-                                            <Badge variant="secondary" className="bg-red-500 text-white">
-                                                <Ban />
-                                                {labelStatusSurat[surat.validasi_surat.status]}
+                                        {surat.status === 'cek' ? (
+                                            <Badge variant="secondary" className="bg-orange-500 text-white">
+                                                <Loader2Icon className="animate-spin" />
+                                                {labelStatusSurat[surat.status]}
                                             </Badge>
-                                        ) : surat.validasi_surat?.status === 'proses' ? (
+                                        ) : surat?.status === 'proses' ? (
                                             <Badge variant="secondary" className="bg-yellow-500 text-white">
                                                 <Timer />
-                                                {labelStatusSurat[surat.validasi_surat.status]}
+                                                {labelStatusSurat[surat.status]}
                                             </Badge>
                                         ) : (
                                             <Badge variant="secondary" className="bg-green-500 text-white">
                                                 <BadgeCheck />
-                                                {labelStatusSurat[surat.validasi_surat?.status || '']}
+                                                {labelStatusSurat[surat.status || '']}
                                             </Badge>
                                         )}
                                     </td>
                                     <td className="flex gap-2 px-4 py-2">
-                                        {surat.validasi_surat?.status === 'cek' ? (
+                                        {surat.status === 'cek' ? (
                                             <>
                                                 <Link href={route('surat.ubah', surat.id)}>
                                                     <Button variant="default">Edit</Button>
                                                 </Link>
                                                 <ConfirmDeleteDialog onConfirm={() => handleHapus(surat.id)} nameButton="Batalkan" />
                                             </>
-                                        ) : surat.validasi_surat?.status === 'selesai' ? (
+                                        ) : surat.status === 'selesai' ? (
                                             <a href={route('template_surat.download', surat.id)} target="_blank" rel="noopener noreferrer">
                                                 <Button variant="default">Download Surat</Button>
                                             </a>

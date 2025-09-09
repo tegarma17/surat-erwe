@@ -18,15 +18,17 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface Surat {
+interface ValidasiSurat {
     id: number;
-    created_at: Date;
-    jenis_surat: string;
-    user_detail?: {
-        nama: string;
-    };
-    validasi_surat?: {
-        status: string;
+    status_validasi: string;
+    surat?: {
+        created_at: Date;
+        user_detail?: {
+            nama: string;
+        };
+        jenis_surat?: {
+            nama_surat: string;
+        };
     };
 
     // Add other fields as needed
@@ -35,18 +37,14 @@ interface PageProps {
     flash: {
         message?: string;
     };
-    surat: Surat[];
+    validasiSurat: ValidasiSurat[];
 }
 
 export default function SuratIndex() {
-    const { surat, flash } = usePage().props as unknown as PageProps;
-    console.log(surat);
+    const { validasiSurat, flash } = usePage().props as unknown as PageProps;
+    console.log(validasiSurat);
     const [show, setShow] = useState(!!flash.message);
-    const labelJenisSurat: Record<string, string> = {
-        suket: 'Surat Keterangan',
-        sudom: 'Surat Domisili',
-        supen: 'Surat Pengantar',
-    };
+
     const labelStatusSurat: Record<string, string> = {
         cek: 'Ditolak',
         proses: 'Proses',
@@ -87,7 +85,7 @@ export default function SuratIndex() {
                     <input type="text" placeholder="Search..." className="rounded-md border px-3 py-2 text-sm text-black" />
                 </div>
 
-                {surat.length > 0 && (
+                {validasiSurat.length > 0 && (
                     <table className="min-w-full divide-y divide-gray-200 text-sm">
                         <thead className="bg-gray-100">
                             <tr>
@@ -99,31 +97,31 @@ export default function SuratIndex() {
                             </tr>
                         </thead>
                         <tbody>
-                            {surat.map((surat, i) => (
+                            {validasiSurat.map((validasi, i) => (
                                 <tr key={i} className="text-gray-800 transition odd:bg-white even:bg-gray-50 hover:bg-gray-100">
-                                    <td className="px-4 py-2">{surat.user_detail?.nama || ''}</td>
-                                    <td className="px-4 py-2">{labelJenisSurat[surat.jenis_surat]}</td>
-                                    <td className="px-4 py-2">{new Date(surat.created_at).toLocaleDateString()}</td>
+                                    <td className="px-4 py-2">{validasi?.surat?.user_detail?.nama || ''}</td>
+                                    <td className="px-4 py-2">{validasi?.surat?.jenis_surat?.nama_surat || ''}</td>
+                                    <td className="px-4 py-2">{new Date(validasi?.surat?.created_at).toLocaleDateString('id-ID') || ''}</td>
                                     <td className="px-4 py-2">
-                                        {surat.validasi_surat?.status === 'cek' ? (
+                                        {validasi.status_validasi === 'cek' ? (
                                             <Badge variant="secondary" className="bg-red-500 text-white">
                                                 <Ban />
-                                                {labelStatusSurat[surat.validasi_surat.status]}
+                                                {labelStatusSurat[validasi.status_validasi]}
                                             </Badge>
-                                        ) : surat.validasi_surat?.status === 'proses' ? (
+                                        ) : validasi.status_validasi === 'proses' ? (
                                             <Badge variant="secondary" className="bg-yellow-500 text-white">
                                                 <Timer />
-                                                {labelStatusSurat[surat.validasi_surat.status]}
+                                                {labelStatusSurat[validasi.status_validasi]}
                                             </Badge>
                                         ) : (
                                             <Badge variant="secondary" className="bg-green-500 text-white">
                                                 <BadgeCheck />
-                                                {labelStatusSurat[surat.validasi_surat?.status || '']}
+                                                {labelStatusSurat[validasi.status_validasi || '']}
                                             </Badge>
                                         )}
                                     </td>
                                     <td className="flex gap-2 px-4 py-2">
-                                        <Link href={route('validasi_surat.ubah', surat.id)}>
+                                        <Link href={route('validasi_surat.ubah', validasi.id)}>
                                             <Button variant="default">Lihat Selengkapnya</Button>
                                         </Link>
                                     </td>
@@ -134,7 +132,7 @@ export default function SuratIndex() {
                 )}
 
                 <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
-                    <span>Showing {surat.length} entries</span>
+                    <span>Showing {validasiSurat.length} entries</span>
                     <div className="space-x-2">
                         <button className="rounded border px-2 py-1 hover:bg-gray-100">Previous</button>
                         <button className="rounded border px-2 py-1 hover:bg-gray-100">Next</button>

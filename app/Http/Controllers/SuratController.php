@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Surat;
 use App\Models\Jabatan;
+use App\Models\JenisSurat;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use App\Models\ValidasiSurat;
@@ -19,11 +20,11 @@ class SuratController extends Controller
      */
     public function index()
     {
-        $user = Auth::id();
-        $warga = UserDetail::where('users_id', $user)->first();
-        $surat = Surat::with(['validasiSurat'])
-            ->where('warga_id', $warga->id)
+        $wargaId = Auth::user()->user_detail->id;
+        $surat = Surat::with(['validasiSurat', 'jenisSurat'])
+            ->where('warga_id', $wargaId)
             ->get();
+
         return Inertia::render('Surat/Index', compact('surat'));
     }
 
@@ -32,7 +33,8 @@ class SuratController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Surat/Tambah');
+        $jenisSurat = JenisSurat::all();
+        return Inertia::render('Surat/Tambah', compact('jenisSurat'));
     }
 
     /**
@@ -40,34 +42,70 @@ class SuratController extends Controller
      */
     public function store(Request $request)
     {
-        $userID = Auth::user()->id;
-        $userDetailId = UserDetail::where('users_id', $userID)->value('id');
 
-        $validated =  $request->validate([
-            'jenis_surat' => 'required',
-            'alasan' => 'required',
-            'lampiran' => 'required|file|mimes:zip, rar|max:10240',
-            'surat_id' => 'nullable|exists:surats,id',
-            'status' => 'nullable', // Optional, for updating existing surat
-        ]);
+        $wargaId = Auth::user()->user_detail->id;
+        $warga = UserDetail::with('rt.rw')->find($wargaId);
+        $jenisSurat = JenisSurat::findOrFail($request->jenis_surat_id);
+        $alasanPengajuan = $request->alasan_manual
+            ? $request->alasan
+            : $jenisSurat->alasan_dflt;
+
+
+        // $validated =  $request->validate([
+        //     'jenis_surat' => 'required',
+        //     'alasan' => 'required',
+        //     'lampiran' => 'required|file|mimes:zip, rar|max:10240',
+        //     'surat_id' => 'nullable|exists:surats,id',
+        //     'status' => 'nullable', // Optional, for updating existing surat
+        // ]);
 
         $surat = [
-            'warga_id' => $userDetailId,
-            'jenis_surat' => $validated['jenis_surat'],
-            'alasan' => $validated['alasan'],
+            'warga_id' => $wargaId,
+            'jenis_surat_id' => $request->jenis_surat_id,
+            'alasan_pengajuan' => $jenisSurat->alasan_default,
+            'alasan' => $alasanPengajuan,
+            'alasan_manual' => $request->alasan_manual,
+            'validasi_rw' => $request->validasi_rw,
+            'status' => 'cek'
+
         ];
+        // $namaRW = $userDetail->rt->rw;
         if ($request->hasFile('lampiran')) {
             $surat['lampiran'] = $request->file('lampiran')->store('lampiran', 'public');
         }
         Surat::create($surat);
-        $validasiSurat = [
-            'surat_id' => Surat::latest()->first()->id,
-            'status' => 'Proses',
-            'jabatan_id' => null,
-            'alasan' => null
-        ];
-        ValidasiSurat::create($validasiSurat);
 
+        $petugasRT = UserDetail::where('rt_id', $warga->rt_id)
+            ->whereHas('jabatan', fn($q) => $q->where('tingkatan', 'rt'))
+            ->with('jabatan')
+            ->first();
+        $jabatanRT = $petugasRT->jabatan;
+
+        $rwId = $warga->rt->rw_id;
+        $petugasRW = UserDetail::whereHas('jabatan', fn($q) => $q->where('tingkatan', 'rw'))
+            ->whereHas('rt', fn($q) => $q->where('rw_id', $rwId))
+            ->with('jabatan')
+            ->first();
+        $jabatanRW = $petugasRW?->jabatan;
+
+        $validasi = [
+            [
+                'surat_id' => Surat::latest()->first()->id,
+                'jabatan_id' => $jabatanRT->id,
+                'urutan_validasi' => 1,
+                'status_validasi' => 'cek'
+            ]
+        ];
+        if ($request->validasi_rw && $jabatanRW) {
+            $validasi[] = [
+                'surat_id' => Surat::latest()->first()->id,
+                'jabatan_id' => $jabatanRW->id,
+                'urutan_validasi' => 2,
+                'status_validasi' => 'cek'
+            ];
+        }
+
+        ValidasiSurat::insert($validasi);
         return redirect()->route('surat.index')->with('message', 'Surat Berhasil dibuat');
     }
 

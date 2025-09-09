@@ -12,8 +12,11 @@ class ValidasiSurat extends Model
     protected $fillable = [
         'surat_id',
         'jabatan_id',
-        'status',
-        'alasan'
+        'urutan_validasi',
+        'catatan',
+        'tgl_validasi',
+        'status_valiadsai',
+
 
     ];
     public function jabatan()

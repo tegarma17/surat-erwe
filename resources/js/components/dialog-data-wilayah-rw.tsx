@@ -18,6 +18,10 @@ export function DialogWilayahRw({ kelurahanId }: props) {
         kelurahan_id: kelurahanId,
         rows: [{ nomer: '' }],
     });
+    const handleDelete = (indexToDelete: number) => {
+        const updated = data.rows.filter((_, index) => index !== indexToDelete);
+        setData({ ...data, rows: updated });
+    };
 
     return (
         <>
@@ -45,6 +49,9 @@ export function DialogWilayahRw({ kelurahanId }: props) {
                                 }}
                             />
                             {errors[`rows.${index}.nomer`] && <p className="text-sm text-red-500">{errors[`rows.${index}.nomer`]}</p>}
+                            <Button className="bg-red-500" onClick={() => handleDelete(index)}>
+                                - Hapus Baris
+                            </Button>
                         </div>
                     ))}
 

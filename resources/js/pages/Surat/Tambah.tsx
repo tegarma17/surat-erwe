@@ -1,11 +1,15 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
+import type { CheckedState } from '@radix-ui/react-checkbox';
 import { CircleAlert } from 'lucide-react';
+import { useState } from 'react';
+
 import React from 'react';
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -23,17 +27,32 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+interface JenisSurat {
+    id: number;
+    nama_surat: string;
+    alasan: string;
+}
+interface PageProps {
+    jenisSurat: JenisSurat[];
+}
+
 export default function SuratTambah() {
+    const { jenisSurat } = usePage().props as unknown as PageProps;
+    const [isChecked, setIsChecked] = useState<CheckedState>(false);
+
     const { data, setData, post, processing, errors } = useForm({
         warga_id: '',
-        jenis_surat: '',
+        jenis_surat_id: '',
         alasan: '',
+        alasan_manual: false,
+        validasi_rw: true,
         lampiran: null as File | null,
     });
     const handleSimpan = (e: React.FormEvent) => {
         e.preventDefault();
         post(route('surat.tambah'));
     };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Tambah Berita Baru" />
@@ -57,24 +76,31 @@ export default function SuratTambah() {
                     )}
                     <div className="grid w-full gap-3">
                         <Label>Jenis Surat</Label>
-                        <Select value={data.jenis_surat} onValueChange={(val) => setData('jenis_surat', val)}>
+                        <Select value={data.jenis_surat_id} onValueChange={(val) => setData('jenis_surat_id', val)}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Pilih Kategori Berita" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel>Kategori</SelectLabel>
-                                    <SelectItem value="suket">Surat Keterangan</SelectItem>
-                                    <SelectItem value="supen">Surat Pengantar</SelectItem>
-                                    <SelectItem value="sudom">Surat Domisili</SelectItem>
+                                    {jenisSurat.map((js) => (
+                                        <SelectItem key={js.id} value={String(js.id)}>
+                                            {js.nama_surat}
+                                        </SelectItem>
+                                    ))}
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
                     </div>
-                    <div className="grid w-full gap-3">
-                        <Label>Alasan</Label>
-                        <Input value={data.alasan} onChange={(e) => setData('alasan', e.target.value)} />
-                    </div>
+
+                    {data.alasan_manual && (
+                        <>
+                            <div className="grid w-full gap-3">
+                                <Label>Alasan</Label>
+                                <Input value={data.alasan} onChange={(e) => setData('alasan', e.target.value)} />
+                            </div>
+                        </>
+                    )}
 
                     <div className="grid w-full gap-3">
                         <Label>Lampiran</Label>
@@ -87,7 +113,31 @@ export default function SuratTambah() {
                             }}
                         />
                     </div>
-
+                    <div className="grid w-full gap-3">
+                        <div className="flex items-start gap-3">
+                            <Checkbox id="terms-2" checked={data.alasan_manual} onCheckedChange={(val) => setData('alasan_manual', Boolean(val))} />
+                            <div className="grid gap-2">
+                                <Label htmlFor="terms-2">Buat Alasan Sendiri</Label>
+                                <p className="text-sm text-muted-foreground">
+                                    Optional, Jika tidak di centang maka alasan akan membuat alasan by sistem
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                            <Checkbox
+                                id="terms-2"
+                                checked={data.validasi_rw}
+                                onCheckedChange={(val) => setData('validasi_rw', Boolean(val))}
+                                defaultChecked
+                            />
+                            <div className="grid gap-2">
+                                <Label htmlFor="terms-2">Butuh Tanda Tangan RW</Label>
+                                <p className="text-sm text-muted-foreground">
+                                    Ketika di centang maka validasi harus sampai di cek oleh Ketua RW setempat
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                     <button type="submit" disabled={processing} className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
                         Simpan
                     </button>

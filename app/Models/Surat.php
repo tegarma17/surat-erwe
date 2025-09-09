@@ -12,8 +12,12 @@ class Surat extends Model
     protected $table = 'surat';
     protected $fillable = [
         'warga_id',
-        'jenis_surat',
+        'jenis_surat_id',
+        'validasi_rw',
         'alasan',
+        'alasan_pengajuan',
+        'alasan_manual',
+        'status',
         'lampiran',
     ];
     public function jabatan()
@@ -27,5 +31,9 @@ class Surat extends Model
     public function validasiSurat()
     {
         return $this->hasOne(ValidasiSurat::class, 'surat_id');
+    }
+    public function jenisSurat()
+    {
+        return $this->belongsTo(JenisSurat::class);
     }
 }
