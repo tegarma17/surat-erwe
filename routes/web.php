@@ -65,7 +65,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/validasi-data-surat', 'index')->name('validasi.index');
         Route::get('/validasi-data-surat/{id}/edit', 'edit')->name('validasi_surat.ubah');
         Route::get('/validasi-surat/{id}/download', 'download')->name('surat.download');
-        Route::put('/validasi-surat/{validasi_surat}', 'update')->name('validasi_surat.update');
+        Route::put('/validasi-surat/{validasi}', 'update')->name('validasi_surat.update');
     });
 
     Route::controller(JabatanController::class)->group(function () {

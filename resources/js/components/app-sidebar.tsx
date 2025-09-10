@@ -2,7 +2,7 @@ import { NavMain } from '@/components/nav-main';
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { MapPin, Newspaper, SquarePen, StickyNote, User, UserCog, Users } from 'lucide-react';
+import { MapPin, Newspaper, SquarePen, StickyNote, User, UserCog, Users, Archive } from 'lucide-react';
 
 import AppLogo from './app-logo';
 
@@ -16,6 +16,7 @@ const mainNavItemsBerita: NavItem[] = [{ title: 'Data Berita', href: '/berita', 
 const mainNavItemsSurat: NavItem[] = [
     { title: 'Data Surat', href: '/data-surat', icon: StickyNote },
     { title: 'Validasi Surat', href: '/validasi-data-surat', icon: SquarePen },
+    { title: 'Arsip Surat', href: '/arsip-data-surat', icon: Archive },
 ];
 
 export function AppSidebar() {

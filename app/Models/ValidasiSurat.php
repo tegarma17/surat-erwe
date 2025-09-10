@@ -13,11 +13,9 @@ class ValidasiSurat extends Model
         'surat_id',
         'jabatan_id',
         'urutan_validasi',
+        'status_validasi',
         'catatan',
         'tgl_validasi',
-        'status_valiadsai',
-
-
     ];
     public function jabatan()
     {

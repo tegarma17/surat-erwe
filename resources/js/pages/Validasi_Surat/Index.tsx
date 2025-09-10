@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { BadgeCheck, Ban, CheckCircle2Icon, Timer } from 'lucide-react';
+import { BadgeCheck, CheckCircle2Icon, Loader2Icon, Timer } from 'lucide-react';
 import { useEffect, useState } from 'react';
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -22,7 +22,7 @@ interface ValidasiSurat {
     id: number;
     status_validasi: string;
     surat?: {
-        created_at: Date;
+        created_at?: Date;
         user_detail?: {
             nama: string;
         };
@@ -46,9 +46,10 @@ export default function SuratIndex() {
     const [show, setShow] = useState(!!flash.message);
 
     const labelStatusSurat: Record<string, string> = {
-        cek: 'Ditolak',
+        cek: 'Cek',
         proses: 'Proses',
         selesai: 'Selesai',
+        ditolak: 'Ditolak',
     };
 
     useEffect(() => {
@@ -62,7 +63,7 @@ export default function SuratIndex() {
     }, [flash.message]);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Berita" />
+            <Head title="Validasi Surat " />
             <div className="mx-5 my-3 flex">
                 <Link href={route('surat.create')}>
                     <Button className="bg-empat text-white hover:bg-lima">Buat Surat</Button>
@@ -101,11 +102,13 @@ export default function SuratIndex() {
                                 <tr key={i} className="text-gray-800 transition odd:bg-white even:bg-gray-50 hover:bg-gray-100">
                                     <td className="px-4 py-2">{validasi?.surat?.user_detail?.nama || ''}</td>
                                     <td className="px-4 py-2">{validasi?.surat?.jenis_surat?.nama_surat || ''}</td>
-                                    <td className="px-4 py-2">{new Date(validasi?.surat?.created_at).toLocaleDateString('id-ID') || ''}</td>
+                                    <td className="px-4 py-2">
+                                        {validasi.surat?.created_at ? new Date(validasi.surat?.created_at).toLocaleDateString('id-ID') : '—'}
+                                    </td>
                                     <td className="px-4 py-2">
                                         {validasi.status_validasi === 'cek' ? (
-                                            <Badge variant="secondary" className="bg-red-500 text-white">
-                                                <Ban />
+                                            <Badge variant="secondary" className="bg-orange-500 text-white">
+                                                <Loader2Icon className="animate-spin" />
                                                 {labelStatusSurat[validasi.status_validasi]}
                                             </Badge>
                                         ) : validasi.status_validasi === 'proses' ? (

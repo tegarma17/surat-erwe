@@ -11,7 +11,7 @@
 
     <div style="text-align: center; margin-bottom: 10px;">
         <div style="font-size: 25px; text-align:center; font-weight:bold; text-decoration: underline; text-decoration-color: black;">SURAT KETERANGAN</div>
-        <p style="margin-top: 5px;">Nomor: 400.7.22.1/SKET/VIII/2025</p>
+        <p style="margin-top: 5px;">Nomor: {{ sprintf('%03d', $surat->id) }}/{{ $surat->jenisSurat->kd_surat }}/{{ $nomerSurat }}/{{ 2025 }}</p>
     </div>
     <div style="text-align: justify; text-indent: 30px;">
         <p> Yang bertanda tangan di bawah ini Ketua Rukun Tetangga (RT) {{ $userDetail->rt->nomer }} - Rukun Warga (RW) {{ $userDetail->rt->rw->nomer }} Kelurahan Grabagan
@@ -117,15 +117,15 @@
         <tr>
             <td style="width: 50%; text-align: center;">
                 Mengetahui,<br>
-                Ketua RW {{ $userDetail->rt->rw->nomer }}<br><br><br><br><br><br><br>
-                <u>{{ $jabatanRw->warga->nama }}</u><br>
+                Ketua RW {{ $rt->warga->rt->rw->nomer }}<br><br><br><br><br><br><br>
+                <u>{{ $rt->warga->nama }}</u><br>
 
             </td>
             <td style="width: 50%; text-align: center;">
                 Sidoarjo, {{ \Carbon\Carbon::parse($surat->created_at)->locale('id')->translatedFormat('d F Y') }}<br>
                 Ketua RT {{ $userDetail->rt->nomer }}<br><br><br><br><br><br><br>
-                <u>Rina Kartika, S.Pd</u><br>
- 
+                <u>{{ $rw->warga->nama }}</u><br>
+
             </td>
         </tr>
     </table>

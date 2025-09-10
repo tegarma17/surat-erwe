@@ -15,13 +15,15 @@ use Illuminate\Support\Facades\Storage;
 
 class SuratController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $wargaId = Auth::user()->user_detail->id;
-        $surat = Surat::with(['validasiSurat', 'jenisSurat'])
+        $surat = Surat::with(['jenisSurat'])
             ->where('warga_id', $wargaId)
             ->get();
 
@@ -132,18 +134,51 @@ class SuratController extends Controller
                 'tidak' => 'Tidak Bekerja'
             ][$kode] ?? 'Tidak Diketahui';
         }
+        function romawi($bulan)
+        {
+            $map = [
+                1 => 'I',
+                2 => 'II',
+                3 => 'III',
+                4 => 'IV',
+                5 => 'V',
+                6 => 'VI',
+                7 => 'VII',
+                8 => 'VIII',
+                9 => 'IX',
+                10 => 'X',
+                11 => 'XI',
+                12 => 'XII'
+            ];
+
+            return $map[(int)$bulan] ?? '-';
+        }
         $user = Auth::user()->id;
         $userDetail = UserDetail::with('rt.rw')->where('users_id', $user)->first();
-        $surat = Surat::findOrFail($id);
-        $validasiSurat = ValidasiSurat::with(['surat', 'jabatan.warga.rt.rw'])->where('surat_id', $surat->id)->first();
-        $cekJabatan = Jabatan::where('ket', 'rw')->get();
-        dd($validasiSurat);
+        $surat = Surat::with(['jenisSurat', 'validasiSurat.jabatan'])->findOrFail($id);
+
+        $jabatanRt = Jabatan::with('warga.rt.rw')
+            ->where('tingkatan', 'rt')
+            ->where('warga_id', $surat->validasiSurat->where('urutan_validasi', '1')->first()?->jabatan->warga_id)
+            ->first();
+
+        $jabatanRw = Jabatan::with('warga')
+            ->where('tingkatan', 'rw')
+            ->where('warga_id', $surat->validasiSurat->where('urutan_validasi', '2')->first()?->jabatan->warga_id)
+            ->first();
+        $bulanRomawi = romawi(date('n', strtotime($surat->created_at)));
+        $tahun = date('Y', strtotime($surat->created_at));
+        
         $userDetail->pekerjaan = labelKerja($userDetail->pekerjaan);
         $viewData = [
             'userDetail' => $userDetail,
             'surat' => $surat,
+            'rt' => $jabatanRt,
+            'rw' => $jabatanRw,
+            'nomerSurat' => $bulanRomawi,
+            'tahun' => $tahun,
         ];
-        if ($surat->jenis_surat == 'suket') {
+        if ($surat->jenisSurat->kd_surat == 'SKET') {
             $pdf = Pdf::loadView('templates.surat_kustom', $viewData);
         } elseif ($surat->jenis_surat == 'sudom') {
             $pdf = Pdf::loadView('templates.surat_domisili', $viewData);
