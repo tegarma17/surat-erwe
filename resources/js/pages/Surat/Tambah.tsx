@@ -6,9 +6,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, useForm, usePage } from '@inertiajs/react';
-import type { CheckedState } from '@radix-ui/react-checkbox';
 import { CircleAlert } from 'lucide-react';
-import { useState } from 'react';
 
 import React from 'react';
 const breadcrumbs: BreadcrumbItem[] = [
@@ -38,7 +36,6 @@ interface PageProps {
 
 export default function SuratTambah() {
     const { jenisSurat } = usePage().props as unknown as PageProps;
-    const [isChecked, setIsChecked] = useState<CheckedState>(false);
 
     const { data, setData, post, processing, errors } = useForm({
         warga_id: '',

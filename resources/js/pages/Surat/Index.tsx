@@ -39,7 +39,7 @@ interface PageProps {
 export default function SuratIndex() {
     const { surat, flash } = usePage().props as unknown as PageProps;
     const [show, setShow] = useState(!!flash.message);
-
+            
     const labelStatusSurat: Record<string, string> = {
         cek: 'Cek',
         proses: 'Proses',

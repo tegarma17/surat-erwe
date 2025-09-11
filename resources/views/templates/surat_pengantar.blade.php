@@ -5,16 +5,16 @@
       <div style="font-size: 20px; font-weight:bold">PEMERINTAH KABAPUTEN SIDOARJO</div>
       <div style="font-size: 20px; font-weight:bold; margin-top: 5px;">KELURAHAN GRABAGAN - KECAMATAN TULANGAN
       </div>
-      <div style="font-size: 20px; font-weight:bold; margin-top: 5px;">RUKUN TETANGGA ( RT ) 54 - RUKUN WARGA ( RW ) 08  </div>
+      <div style="font-size: 20px; font-weight:bold; margin-top: 5px;">RUKUN TETANGGA ( RT ) {{ $userDetail->rt->nomer }} - RUKUN WARGA ( RW ) {{ $userDetail->rt->rw->nomer }}  </div>
     </div>
     <div style="width: 100%; height: 4px; background-color: black; margin: 20px 0;"></div>
 
     <div style="text-align: center; margin-bottom: 10px;">
         <div style="font-size: 25px; text-align:center; font-weight:bold; text-decoration: underline; text-decoration-color: black;">SURAT PENGANTAR</div>
-        <p style="margin-top: 5px;">Nomor: 400.7.22.1/SKET/VIII/2025</p>
+        <p style="margin-top: 5px;">Nomor: {{ sprintf('%03d', $surat->id) }}/{{ $surat->jenisSurat->kd_surat }}/{{ $nomerSurat }}/{{ 2025 }}</p>
     </div>
     <div style="text-align: justify; text-indent: 30px;">
-        <p> Yang bertanda tangan di bawah ini Ketua Rukun Tetangga (RT) 54 - Rukun Warga (RW) 08 Kelurahan Grabagan
+        <p> Yang bertanda tangan di bawah ini Ketua Rukun Tetangga (RT) {{ $userDetail->rt->nomer }} - Rukun Warga (RW) {{ $userDetail->rt->rw->nomer }} Kelurahan Grabagan
             , Kecamatan Tulangan, Kabupaten Sidoarjo, menerangkan bahwa:
         </p>
     </div>
@@ -93,7 +93,18 @@
                         :
                     </td>
                     <td style="width: 60%">
-                        Wirausaha
+                       {{ $userDetail->pekerjaan }}
+                    </td>
+                </tr>
+                 <tr>
+                    <td style="width: 30%; text-align: left; padding-top: 10px;">
+                       Keperluan
+                    </td>
+                    <td style="width: 1%">
+                        :
+                    </td>
+                    <td style="width: 60%">
+                        {{ $surat->alasan }}
                     </td>
                 </tr>
             </table>
@@ -104,17 +115,25 @@
 
     <table style="width: 100%; margin-top: 30px;">
         <tr>
-            <td style="width: 50%; text-align: center;">
-                Mengetahui,<br>
-                Ketua RW 08<br><br><br><br><br><br><br>
-                <u>Drs. Ahmad Suryanto</u><br>
+             @if($surat->validasi_rw === true)
+                <td style="width: 50%; text-align: center;">
+                    Mengetahui,<br>
+                    Ketua RW {{ $rt->warga->rt->rw->nomer ?? ''}}<br><br><br><br><br><br><br>
+                    <u>{{ $rw->warga->nama ?? '' }}</u><br>
+                </td>
 
-            </td>
-            <td style="width: 50%; text-align: center;">
-                Surabaya, 5 Agustus 2025<br>
-                Ketua RT 03<br><br><br><br><br><br><br>
-                <u>Rina Kartika, S.Pd</u><br>
-
+                <td style="width: 50%; text-align: center;">
+                    Sidoarjo, {{ \Carbon\Carbon::parse($surat->created_at)->locale('id')->translatedFormat('d F Y') }}<br>
+                    Ketua RT {{ $userDetail->rt->nomer }}<br><br><br><br><br><br><br>
+                    <u>{{ $rt->warga->nama }}</u><br>
+                </td>
+            @endif
+            <td colspan="2" style="text-align: right;">
+                <div style="display: inline-block; width: 250px; text-align: center;">
+                    Sidoarjo, {{ \Carbon\Carbon::parse($surat->created_at)->locale('id')->translatedFormat('d F Y') }}<br>
+                    Ketua RT {{ $userDetail->rt->nomer ?? '-' }}<br><br><br><br><br>
+                    <u>{{ $rt->warga->nama ?? '-' }}</u><br>
+                </div>
             </td>
         </tr>
     </table>

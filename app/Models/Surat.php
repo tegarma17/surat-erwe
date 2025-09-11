@@ -20,6 +20,9 @@ class Surat extends Model
         'status',
         'lampiran',
     ];
+    protected $casts = [
+        'validasi_rw' => 'boolean'
+    ];
     public function jabatan()
     {
         return $this->hasOne(Jabatan::class);

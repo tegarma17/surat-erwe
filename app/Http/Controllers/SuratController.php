@@ -12,6 +12,7 @@ use App\Models\ValidasiSurat;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Services\Surat\SuratRendererFactory;
 
 class SuratController extends Controller
 {
@@ -116,6 +117,8 @@ class SuratController extends Controller
      */
     public function downloadSurat(string $id)
     {
+
+
         function labelKerja($kode)
         {
             return [
@@ -166,26 +169,41 @@ class SuratController extends Controller
             ->where('tingkatan', 'rw')
             ->where('warga_id', $surat->validasiSurat->where('urutan_validasi', '2')->first()?->jabatan->warga_id)
             ->first();
-        $bulanRomawi = romawi(date('n', strtotime($surat->created_at)));
-        $tahun = date('Y', strtotime($surat->created_at));
-        
-        $userDetail->pekerjaan = labelKerja($userDetail->pekerjaan);
-        $viewData = [
-            'userDetail' => $userDetail,
-            'surat' => $surat,
+
+        $jabatanData = [
             'rt' => $jabatanRt,
-            'rw' => $jabatanRw,
-            'nomerSurat' => $bulanRomawi,
-            'tahun' => $tahun,
         ];
-        if ($surat->jenisSurat->kd_surat == 'SKET') {
-            $pdf = Pdf::loadView('templates.surat_kustom', $viewData);
-        } elseif ($surat->jenis_surat == 'sudom') {
-            $pdf = Pdf::loadView('templates.surat_domisili', $viewData);
-        } else {
-            $pdf = Pdf::loadView('templates.surat_pengantar', $viewData);
+
+        if ($surat->validasi_rw) {
+            $jabatanData['rw'] = $jabatanRw;
         }
-        return $pdf->download('surat-kustom.pdf');
+
+        $renderer = SuratRendererFactory::make($surat->jenisSurat->kd_surat);
+        $viewData = $renderer->buildViewData($surat, $jabatanData);
+        $template = $renderer->getTemplate();
+        return Pdf::loadView($template, $viewData)->download('surat-kustom.pdf');
+
+        // $bulanRomawi = romawi(date('n', strtotime($surat->created_at)));
+        // $tahun = date('Y', strtotime($surat->created_at));
+
+
+        // $userDetail->pekerjaan = labelKerja($userDetail->pekerjaan);
+        // $viewData = [
+        //     'userDetail' => $userDetail,
+        //     'surat' => $surat,
+        //     'rt' => $jabatanRt,
+        //     'rw' => $jabatanRw,
+        //     'nomerSurat' => $bulanRomawi,
+        //     'tahun' => $tahun,
+        // ];
+        // if ($surat->jenisSurat->kd_surat == 'SKET' && $surat->validasi_rw === true) {
+        //     $pdf = Pdf::loadView('templates.surat_kustom', $viewData);
+        // } elseif ($surat->jenis_surat == 'sudom') {
+        //     $pdf = Pdf::loadView('templates.surat_domisili', $viewData);
+        // } else {
+        //     $pdf = Pdf::loadView('templates.surat_pengantar', $viewData);
+        // }
+        // return $pdf->download('surat-kustom.pdf');
     }
     /**
      * Show the form for editing the specified resource.
